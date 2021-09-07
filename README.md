@@ -1,15 +1,16 @@
 # Proyecto-de-Catedra-CryptoExpert
 Repositorio para el desarrollo de la aplicación de CryptoExpert
 # Integrantes 
-Marlin Jose Ardon Martinez AM120254
-Jeffrey Steven Morán Martínez MM161923
-José Daniel Martínez Ayala MA161916 
-Francisco Josué Gonzalez Portillo GP121514
+Marlin Jose Ardon Martinez AM120254 </br>
+Jeffrey Steven Morán Martínez MM161923 </br>
+José Daniel Martínez Ayala MA161916 </br>
+Francisco Josué Gonzalez Portillo GP121514 </br>
 # Grupo Teorico: 02T
 # Trello
 https://trello.com/b/i4dWXrya/cryptoexpert-dps-ciclo02-2021
 # Mockups
 Figma - https://www.figma.com/proto/utNslcQW3aVwSUk2pq6BYH/CryptoExpert?node-id=2%3A2&scaling=scale-down&page-id=0%3A1&starting-point-node-id=2%3A2
+</br>
 Presentación - https://drive.google.com/file/d/1cFnJpUF3a3LKa2DkUuSs8H6L7TVMwNfW/view
 
 # Licencia 
