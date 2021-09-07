@@ -1,7 +1,7 @@
 # Proyecto de Catedra CryptoExpert
 Repositorio para el desarrollo de la aplicación de CryptoExpert
 # Integrantes 
-Marlin Jose Ardon Martinez AM120254 </br>
+Marlin Jose Ardon Martínez AM120254 </br>
 Jeffrey Steven Morán Martínez MM161923 </br>
 José Daniel Martínez Ayala MA161916 </br>
 Francisco Josué Gonzalez Portillo GP121514 </br>
