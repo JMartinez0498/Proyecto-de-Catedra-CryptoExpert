@@ -18,7 +18,7 @@ export default function SettingsStack() {
         name="SettingsStack"
         component={SettingsScreen}
         options={{
-          title: 'Settings',
+          title: 'Opciones',
         }}
       />
     </Stack.Navigator>

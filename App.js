@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import {StatusBar, StyleSheet, useColorScheme, Text} from 'react-native';
+import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import Navigation from './src/navigation/Navigation';
 
@@ -21,7 +21,5 @@ const App = () => {
     </>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default App;

@@ -17,7 +17,7 @@ export default function MyTabs() {
   return (
     <Tab.Navigator barStyle={styles.base} activeColor={colors.accent}>
       <Tab.Screen
-        name="Home"
+        name="Inicio"
         component={HomeStack}
         options={{
           tabBarIcon: ({color}) => (
@@ -39,7 +39,7 @@ export default function MyTabs() {
         }}
       />
       <Tab.Screen
-        name="News"
+        name="Noticias"
         component={NewsStack}
         options={{
           tabBarIcon: ({color}) => (
@@ -52,7 +52,7 @@ export default function MyTabs() {
         }}
       />
       <Tab.Screen
-        name="Settings"
+        name="Opciones"
         component={SettingsStack}
         options={{
           tabBarIcon: ({color}) => (
