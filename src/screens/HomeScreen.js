@@ -6,7 +6,7 @@ import {colors} from '../util/colors';
 const Home = () => {
   return (
     <View style={styles.base}>
-      <Text style={styles.text}>Home!</Text>
+      <Text style={styles.text}>Home! Lista de monedas</Text>
     </View>
   );
 };
