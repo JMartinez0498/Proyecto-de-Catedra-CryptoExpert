@@ -24,9 +24,9 @@ return(
             />
             <Text style={styles.coinSymbol}>{props.coin.item.symbol}</Text>
         </View>
-        <Text style={styles.text}>${props.coin.item.current_price}</Text>
-        <Text style={styles.text}>{priceChange.toFixed(2)}%</Text>
-        <Text style={styles.text}>${props.coin.item.market_cap}</Text>
+        <Text style={styles.price}>${props.coin.item.current_price}</Text>
+        <Text style={priceChange>0 ? styles.priceChange : styles.priceChangeNegative}>{priceChange.toFixed(2)}%</Text>
+        <Text style={styles.marketCap}>${props.coin.item.market_cap}</Text>
     </View>
 )
 }
@@ -42,17 +42,43 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         borderBottomColor: '#fff',
         borderBottomWidth: 0.5,
+        marginHorizontal: 5,
     },
 
     name:{
         flexDirection: 'column',
-        width: 65,
-        backgroundColor:'orange',
+        width: '15%',
+        alignItems:'center',
     },
 
-    text: {
-      color: colors.text,
+    price: {
+        color: colors.text,
+        width: '25%',
+        textAlign: 'center',
+        textAlignVertical: 'center',
     }, 
+
+    priceChange: {
+        color: 'rgb(102,184,93)',
+        width: '25%',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+    },
+
+    priceChangeNegative: {
+        color: 'red',
+        width: '25%',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+    },
+    
+    marketCap: {
+        color: colors.text,
+        width: '35%',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+      }, 
+      
 
     coinSymbol:{
         textTransform: 'uppercase',

@@ -22,10 +22,10 @@ const Home = () => {
   return (
     <View style={styles.base}>
       <View style={styles.container}>
-        <Text style={styles.text}>Moneda</Text>
-        <Text style={styles.text}>Precio</Text>
-        <Text style={styles.text}>Estado</Text>
-        <Text style={styles.text}>Cap. Mercado</Text>
+        <Text style={styles.name}>Moneda</Text>
+        <Text style={styles.price}>Precio</Text>
+        <Text style={styles.priceChange}>Estado</Text>
+        <Text style={styles.marketCap}>Cap. Mercado</Text>
       </View>
       <FlatList
         data={coins}
@@ -56,5 +56,31 @@ const styles = StyleSheet.create({
   container:{
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },  
+    marginHorizontal: 5,
+  },
+  
+  name:{
+    color: colors.text,
+    flexDirection: 'column',
+    width: '15%',
+    textAlign: 'center',
+},
+
+price: {
+    color: colors.text,
+    width: '25%',
+    textAlign: 'center',
+}, 
+
+priceChange: {
+    color: colors.text,
+    width: '25%',
+    textAlign: 'center',
+},
+
+marketCap: {
+    color: colors.text,
+    width: '35%',
+    textAlign: 'center',
+  }, 
 });
