@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
   base: {
     flex: 1,
     backgroundColor: colors.background,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingHorizontal: 30,
+    paddingVertical: 20,
   },
   text: {
     color: colors.text,
