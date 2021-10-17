@@ -1,71 +1,32 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-// Se pueden encontrar más iconos aquí: https://oblador.github.io/react-native-vector-icons/
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {createStackNavigator} from '@react-navigation/stack';
 
-import HomeStack from '../navigation/HomeStack';
-import MyCryptoStack from '../navigation/MyCryptoStack';
-import SettingsStack from '../navigation/SettingsStack';
-import NewsStack from './NewsStack';
+import TabStack from './TabStack';
+import LoginStack from './userStacks/LoginStack';
 
 import {colors} from '../util/colors';
 
-const Tab = createMaterialBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export default function MyTabs() {
   return (
-    <Tab.Navigator barStyle={styles.base} activeColor={colors.accent}>
-      <Tab.Screen
-        name="Inicio"
-        component={HomeStack}
+    <Stack.Navigator
+      barStyle={{backgroundColor: colors.backgroundDark}}
+      activeColor={colors.accent}>
+      <Stack.Screen
+        name="Home"
+        component={TabStack}
         options={{
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons
-              name="chart-timeline-variant"
-              color={color}
-              size={26}
-            />
-          ),
+          headerShown: false,
         }}
       />
-      <Tab.Screen
-        name="MyCryptos"
-        component={MyCryptoStack}
+      <Stack.Screen
+        name="Test"
+        component={LoginStack}
         options={{
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="bitcoin" color={color} size={26} />
-          ),
+          headerShown: false,
         }}
       />
-      <Tab.Screen
-        name="Noticias"
-        component={NewsStack}
-        options={{
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons
-              name="newspaper-variant-outline"
-              color={color}
-              size={26}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Opciones"
-        component={SettingsStack}
-        options={{
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="account" color={color} size={26} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+    </Stack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  base: {
-    backgroundColor: '#071E22',
-  },
-});
