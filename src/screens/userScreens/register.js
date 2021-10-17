@@ -10,7 +10,7 @@ const register = () => {
     <View style={styles.base}>
       <Text style={styles.text}>Nombre</Text>
       <TextInput style={styles.input} ></TextInput>
-      <Text ty style={styles.text}>Correo</Text>
+      <Text style={styles.text}>Correo</Text>
       <TextInput style={styles.input} ></TextInput>
       <Text style={styles.text}>Contraseña</Text>
       <TextInput style={styles.input} ></TextInput>
