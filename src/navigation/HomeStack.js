@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Image} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen';
+import CoinDetail from '../screens/CoinDetail';
 
 import {colors} from '../util/colors';
 
@@ -27,6 +28,13 @@ export default function HomeStack() {
       <Stack.Screen
         name="HomeStack"
         component={HomeScreen}
+        options={{
+          title: '',
+        }}
+      />
+      <Stack.Screen
+        name="CoinStack"
+        component={CoinDetail}
         options={{
           title: '',
         }}
