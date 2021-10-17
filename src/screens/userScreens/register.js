@@ -14,7 +14,7 @@ const register = () => {
       <TextInput style={styles.input} ></TextInput>
       <Text style={styles.text}>Contraseña</Text>
       <TextInput style={styles.input} ></TextInput>
-      <View>
+      <View style={styles.marginBottom}>
         <Button title="Registrarse" color={colors.button} style={styles.button} />
       </View>
       <View style={styles.opcion}>
@@ -62,8 +62,11 @@ const styles = StyleSheet.create({
     padding:20,
     alignItems:'center'
   },
+  marginBottom:{
+    marginTop:40
+  },
   tinyLogo: {
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
   },
 });
