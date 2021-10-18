@@ -1,10 +1,11 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import SettingsScreen from '../screens/userScreens/Register';
-import {colors} from '../util/colors';
+import RegisterScreen from '../../screens/userScreens/Register';
+
+import {colors} from '../../util/colors';
 const Stack = createStackNavigator();
 
-export default function SettingsStack() {
+export default function RegisterStack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -15,10 +16,10 @@ export default function SettingsStack() {
         },
       }}>
       <Stack.Screen
-        name="SettingsStack"
-        component={SettingsScreen}
+        name="Registro"
+        component={RegisterScreen}
         options={{
-          title: 'Opciones',
+          title: 'Registro',
         }}
       />
     </Stack.Navigator>

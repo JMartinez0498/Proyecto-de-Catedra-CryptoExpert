@@ -1,22 +1,32 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import {View, Text, Button, Image,TextInput,StyleSheet,TouchableOpacity} from 'react-native';
-
-
 import {colors} from '../../util/colors';
+import { AuthContext } from '../../authentication/AuthProvider';
 
 const register = () => {
+  const [email,setEmail] = useState();
+  const [nombre,setNombre] = useState();
+  const [password,setPassword] = useState();
+  const [confirmPassword,setConfirmPassword] = useState();
+
+  const {register} = useContext(AuthContext);
+
   return (
     <>
     <View style={styles.base}>
       <Text style={styles.text}>Nombre</Text>
-      <TextInput style={styles.input} ></TextInput>
+      <TextInput style={styles.input} onChangeText={(nombre=> setNombre(nombre))} ></TextInput>
+
       <Text style={styles.text}>Correo</Text>
-      <TextInput style={styles.input} ></TextInput>
+      <TextInput style={styles.input} onChangeText={(mail=>setEmail(mail))} ></TextInput>
+
       <Text style={styles.text}>Contraseña</Text>
-      <TextInput style={styles.input} ></TextInput>
+      <TextInput style={styles.input} onChangeText={(pass=>setPassword(pass))} ></TextInput>
+
       <View style={styles.marginBottom}>
-        <Button title="Registrarse" color={colors.button} style={styles.button} />
+        <Button title="Registrarse" color={colors.button} style={styles.button} onPress={() =>register(email,password)} />
       </View>
+
       <View style={styles.opcion}>
         <Text style={styles.text}>o</Text>
         <Text style={styles.text}>Registrate con Google</Text>
