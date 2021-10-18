@@ -10,14 +10,14 @@ import {colors} from '../util/colors';
 
 const Stack = createStackNavigator();
 
-function Logo ({ navigation }) {
+function Logo(props) {
   return (
     
     <View style={styles.container}>
       <Image source={require('../images/logo-dark.png')} style={styles.logo} />
       <View style={styles.btnSearch}>
         <TouchableOpacity
-          //onPress={() => navigation.navigate('searchStack')}
+          onPress={() => props.navigation.navigate('SearchStack')}
         >
         <FontAwesome
               name="search"
@@ -30,7 +30,7 @@ function Logo ({ navigation }) {
   );
 };
 
-export default function HomeStack() {
+export default function HomeStack({navigation}) {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -39,7 +39,7 @@ export default function HomeStack() {
           backgroundColor: colors.backgroundDark,
           shadowColor: 'black',
         },
-        headerLeft: () => <Logo />,
+        headerLeft: () => <Logo navigation={navigation} />,
       }}>
       <Stack.Screen
         name="HomeStack"
@@ -49,7 +49,7 @@ export default function HomeStack() {
         }}
       />
       <Stack.Screen
-        name="searchStack"
+        name="SearchStack"
         component={Search}
         options={{
           title: '',

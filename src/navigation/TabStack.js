@@ -65,9 +65,3 @@ export default function TabStack() {
     </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  base: {
-    backgroundColor: '#071E22',
-  },
-});
