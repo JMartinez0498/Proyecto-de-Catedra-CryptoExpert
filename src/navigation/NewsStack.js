@@ -18,7 +18,7 @@ export default function NewsStack() {
         name="NewsStack"
         component={NewsScreen}
         options={{
-          title: 'Nel',
+          title: 'News',
         }}
       />
     </Stack.Navigator>

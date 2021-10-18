@@ -18,9 +18,11 @@ const MyCryptoScreen = ({navigation}) => {
       <Text style={styles.text}>funcionalidad debes tener</Text> 
       <Text style={styles.text}>una cuenta</Text>
       <View style={styles.margin}></View> 
-      <Button title="          Registrate           " color={colors.button} style={styles.button} />
+      <Button title="          Registrate           " color={colors.button} style={styles.button}
+        onPress={() => navigation.navigate('Register')} />
       <View style={styles.margin}></View>
-      <Button title="         Inicia sesion         " color={colors.button} style={styles.button} />
+      <Button title="         Inicia sesion         " color={colors.button} style={styles.button} 
+        onPress={() => navigation.navigate('Login')} />
     </View>
     </>
   );

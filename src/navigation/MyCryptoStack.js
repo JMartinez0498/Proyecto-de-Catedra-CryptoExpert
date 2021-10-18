@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import MyCryptoScreen from '../screens/MyCryptoScreen';
 import Failed from '../screens/NewsScreen';
 import {colors} from '../util/colors';
-import { AuthContext } from '../authentication/AuthProvider';
+import {AuthContext} from '../authentication/AuthProvider';
 const Stack = createStackNavigator();
 
 export default function MyCryptoStack() {
@@ -19,21 +19,21 @@ export default function MyCryptoStack() {
       }}>
       {user?
         <Stack.Screen
-        name="MyCryptoStack"
-        component={MyCryptoScreen}
-        options={{
-          title: 'MyCryptos',
-        }}
-        />
-      :
-      <Stack.Screen
-          name="Failed"
+          name="MyCryptos"
           component={Failed}
           options={{
-            title: 'Failed',
+            title: 'MyCryptos',
           }}
         />
-        }
+      :
+        <Stack.Screen
+          name="MyCryptoStack"
+          component={MyCryptoScreen}
+          options={{
+            title: 'MyCryptos',
+          }}
+        />
+      }
     </Stack.Navigator>
   );
 }
