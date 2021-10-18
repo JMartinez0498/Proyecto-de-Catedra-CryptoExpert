@@ -7,4 +7,5 @@ export const colors = {
   button: '#1D7874',
   red: '#EE2E31',
   green: '#01C059',
+  gray: '#323e40',
 };
