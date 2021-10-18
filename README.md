@@ -14,6 +14,14 @@ Francisco Josué Gonzalez Portillo GP121514 </br>
 - [Figma](https://www.figma.com/proto/utNslcQW3aVwSUk2pq6BYH/CryptoExpert?node-id=76%3A47&scaling=scale-down&page-id=0%3A1&starting-point-node-id=2%3A2)
 - [Documento](https://drive.google.com/file/d/1cFnJpUF3a3LKa2DkUuSs8H6L7TVMwNfW/view)
 
+
+#Manuales
+Manual Tecnico https://drive.google.com/file/d/1rYVjzy1uQXYJvrw4yPwoZUg6PhdH0jsa/view?usp=sharing 
+Manual de Usuario https://drive.google.com/file/d/1s8v9nn4gD8rB3X6Y5rYRr26vTRPiVfbV/view?usp=sharing
+
+#Video de Fase 2
+https://youtu.be/lwePfEj-dzY
+
 # Licencia 
 Atribución-CompartirIgual 4.0 Internacional (CC BY-SA 4.0) 
 ### Usted es libre de 
