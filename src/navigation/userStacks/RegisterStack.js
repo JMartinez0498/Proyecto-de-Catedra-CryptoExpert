@@ -16,7 +16,7 @@ export default function RegisterStack() {
         },
       }}>
       <Stack.Screen
-        name="Registro"
+        name="RegisterScreen"
         component={RegisterScreen}
         options={{
           title: 'Registro',

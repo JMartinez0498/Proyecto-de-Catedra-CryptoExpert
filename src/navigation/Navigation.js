@@ -43,14 +43,14 @@ export default function MyTabs() {
           }}
         />
         <Stack.Screen
-          name="Test"
+          name="Login"
           component={LoginStack}
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
-          name="Registro"
+          name="Register"
           component={RegisterStack}
           options={{
             headerShown: false,

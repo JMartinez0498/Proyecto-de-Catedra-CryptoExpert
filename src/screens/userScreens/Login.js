@@ -1,18 +1,21 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   ScrollView,
   View,
   Text,
   TextInput,
   Image,
-  TouchableHighlight,
   Button,
   StyleSheet,
 } from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {AuthContext} from '../../authentication/AuthProvider';
 
 import {colors} from '../../util/colors';
 
 const LoginScreen = ({navigation}) => {
+  const {login} = useContext(AuthContext);
+
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
 
@@ -28,7 +31,6 @@ const LoginScreen = ({navigation}) => {
       <TextInput
         style={styles.input}
         onChangeText={val => setEmail(val)}
-        title="ALGO"
         value={email}
         autocomplete="email"
       />
@@ -39,10 +41,23 @@ const LoginScreen = ({navigation}) => {
         value={pass}
         secureTextEntry={true}
       />
-      <TouchableHighlight onPress={() => navigation.navigate('Register')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
         <Text style={styles.link}>Olvidé mi contraseña...</Text>
-      </TouchableHighlight>
-      <Button title="Acceder" color={colors.button} />
+      </TouchableOpacity>
+      <Button
+        title="Acceder"
+        color={colors.button}
+        onPress={async () => {
+          await login(email, pass);
+          navigation.goBack();
+        }}
+      />
+
+      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+        <Text style={[styles.link, styles.centered]}>
+          No tienes una cuenta?, crea una aquí
+        </Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -78,5 +93,9 @@ const styles = StyleSheet.create({
   link: {
     marginBottom: 25,
     color: colors.link,
+  },
+  centered: {
+    textAlign: 'center',
+    marginTop: 30,
   },
 });

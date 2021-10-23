@@ -5,7 +5,7 @@ import LoginScreen from '../../screens/userScreens/Login';
 import {colors} from '../../util/colors';
 const Stack = createStackNavigator();
 
-export default function SettingsStack() {
+export default function LoginStack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -16,7 +16,7 @@ export default function SettingsStack() {
         },
       }}>
       <Stack.Screen
-        name="Login"
+        name="LoginScreen"
         component={LoginScreen}
         options={{
           title: 'Iniciar Sesión',
