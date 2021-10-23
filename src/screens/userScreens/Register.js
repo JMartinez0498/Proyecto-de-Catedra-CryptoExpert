@@ -29,7 +29,7 @@ const register = () => {
 
       <View style={styles.opcion}>
         <Text style={styles.text}>o</Text>
-        <Text style={styles.text}>Registrate con Google</Text>
+        <Text style={styles.text}>Registrate con Google(Próximamente)</Text>
       </View>
       <View style={styles.opcion}>
         <TouchableOpacity
@@ -40,6 +40,7 @@ const register = () => {
           />
         </TouchableOpacity>
       </View>
+  
     </View>
     
     </>
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     marginTop:40
   },
   tinyLogo: {
-    width: 70,
-    height: 70,
+    width: 40,
+    height: 40,
   },
 });
