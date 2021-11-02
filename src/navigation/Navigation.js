@@ -1,71 +1,62 @@
-import React from 'react';
-import {StyleSheet} from 'react-native';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-// Se pueden encontrar más iconos aquí: https://oblador.github.io/react-native-vector-icons/
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useEffect, useState,useContext } from 'react';
+import {createStackNavigator} from '@react-navigation/stack';
 
-import HomeStack from '../navigation/HomeStack';
-import MyCryptoStack from '../navigation/MyCryptoStack';
-import SettingsStack from '../navigation/SettingsStack';
-import NewsStack from './NewsStack';
-
+import TabStack from './TabStack';
+import LoginStack from './userStacks/LoginStack';
+import RegisterStack from './userStacks/RegisterStack'
 import {colors} from '../util/colors';
-
-const Tab = createMaterialBottomTabNavigator();
+import auth from'@react-native-firebase/auth';
+import { AuthContext } from '../authentication/AuthProvider';
+import {NavigationContainer} from '@react-navigation/native';
+const Stack = createStackNavigator();
 
 export default function MyTabs() {
+  
+  const {user,setUser} = useContext(AuthContext);
+  const [initializing, setinitializing] = useState(true);
+
+  const onAuthStateChanged = (user) =>{
+    setUser(user);
+    if(initializing){
+      setinitializing(false);
+    }
+  }
+  
+  useEffect(() =>{
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
+
+  if(initializing) {
+    return null;
+  }
   return (
-    <Tab.Navigator barStyle={styles.base} activeColor={colors.accent}>
-      <Tab.Screen
-        name="Inicio"
-        component={HomeStack}
-        options={{
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons
-              name="chart-timeline-variant"
-              color={color}
-              size={26}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="MyCryptos"
-        component={MyCryptoStack}
-        options={{
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="bitcoin" color={color} size={26} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Noticias"
-        component={NewsStack}
-        options={{
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons
-              name="newspaper-variant-outline"
-              color={color}
-              size={26}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Opciones"
-        component={SettingsStack}
-        options={{
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="account" color={color} size={26} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+    <NavigationContainer>
+      <Stack.Navigator
+        barStyle={{backgroundColor: colors.backgroundDark}}
+        activeColor={colors.accent}>
+        <Stack.Screen
+          name="Home"
+          component={TabStack}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginStack}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterStack}
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  base: {
-    backgroundColor: '#071E22',
-  },
-});

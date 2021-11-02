@@ -6,18 +6,25 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';   
 import {StatusBar} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import Navigation from './src/navigation/Navigation';
+import Providers from './src/navigation';
+import {colors} from './src/util/colors';
+
+import SplashScreen from 'react-native-splash-screen';
 
 const App = () => {
+  // Oculta la SplashScreen
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   return (
     <>
-      <StatusBar />
-      <NavigationContainer>
-        <Navigation />
-      </NavigationContainer>
+      <StatusBar
+        backgroundColor={colors.backgroundDark}
+        barStyle="light-content"
+      />
+        <Providers />
     </>
   );
 };

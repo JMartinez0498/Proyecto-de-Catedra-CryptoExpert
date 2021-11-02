@@ -1,10 +1,11 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import NewsScreen from '../screens/NewsScreen';
-import {colors} from '../util/colors';
+import LoginScreen from '../../screens/userScreens/Login';
+
+import {colors} from '../../util/colors';
 const Stack = createStackNavigator();
 
-export default function NewsStack() {
+export default function LoginStack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -15,10 +16,10 @@ export default function NewsStack() {
         },
       }}>
       <Stack.Screen
-        name="NewsStack"
-        component={NewsScreen}
+        name="LoginScreen"
+        component={LoginScreen}
         options={{
-          title: 'News',
+          title: 'Iniciar Sesión',
         }}
       />
     </Stack.Navigator>

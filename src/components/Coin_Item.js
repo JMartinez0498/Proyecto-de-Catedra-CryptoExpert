@@ -17,7 +17,6 @@ const Coin_Item=(props)=>{
         priceFormat()
       }, [])
 
-
 return(
     <View style={styles.containerItem}>
         <View style={styles.name}>
