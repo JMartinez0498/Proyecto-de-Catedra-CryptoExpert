@@ -46,6 +46,84 @@ const CoinDetail = ({route, navigation}) => {
     {day: 7, price: 56772},
   ];
 
+
+//var json = JSON.stringify(selectedCurrency?.item.sparkline_in_7d)
+
+var time = []
+var day = 0
+
+for (var i = day; i < 168; i++) {
+    time.push(i*3600);
+}
+
+var arrayDay =  new Array(168).fill("day:")
+
+var arrayPrice =  new Array(168).fill("price:")
+
+
+var newArray = arrayDay.map((e, i) => e + time[i] + arrayPrice[i] + selectedCurrency?.item.sparkline_in_7d.price[i] );
+
+var prueba = JSON.stringify(data)
+
+const jsonString = JSON.stringify(Object.assign({}, newArray))
+
+
+
+
+
+
+const formatSparkline = (numbers) => {
+  const sevenDaysAgo = moment().subtract(7, 'days').unix();
+  let formattedSparkline = numbers.map((item, index) => {
+    return {
+      x: sevenDaysAgo + (index + 1) * 3600,
+      y: item,
+    }
+  })
+
+  return formattedSparkline;
+}
+
+const formatMarketData = (data) => {
+  let formattedData = [];
+
+  data.forEach(item => {
+    const formattedSparkline = formatSparkline(item.sparkline_in_7d.price)
+
+    const formattedItem = {
+      ...item,
+      sparkline_in_7d: {
+        price: formattedSparkline
+      }
+    }
+
+    formattedData.push(formattedItem);
+  });
+
+  return formattedData;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   function renderChart() {
     return (
       <View style={styles.base}>
@@ -62,7 +140,10 @@ const CoinDetail = ({route, navigation}) => {
           <Text style={styles.title}>({selectedCurrency?.item.symbol})</Text>
         </View>
         <View style={styles.chart}>
-          <VictoryChart width={375} domain={{x: [7, 1]}} theme={VictoryTheme.material}>
+          <VictoryChart
+            width={375}
+            domain={{x: [7, 1]}}
+            theme={VictoryTheme.material}>
             <VictoryLine
               data={data}
               style={{
@@ -74,7 +155,8 @@ const CoinDetail = ({route, navigation}) => {
             />
           </VictoryChart>
         </View>
-
+              <Text>{jsonString}</Text>
+              <Text>{prueba}</Text>
         <Text style={styles.text}>Otros datos</Text>
         <View style={{flexDirection: 'row'}}>
           <View style={styles.baseb}>
