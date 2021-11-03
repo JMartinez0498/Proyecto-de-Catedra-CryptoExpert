@@ -14,7 +14,8 @@ import {
 import {colors} from '../util/colors';
 import HeaderBar from '../components/HeaderBar';
 import {ScrollView} from 'react-native-gesture-handler';
-
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import {
   VictoryBar,
   VictoryLine,
@@ -134,6 +135,13 @@ const formatMarketData = (data) => {
             alignItems: 'flex-start',
           }}>
           <View>
+          <View style={styles.base}>
+            <View style={styles.container}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Text style={styles.text}><FontAwesomeIcon icon={ faArrowLeft } style={ styles.icon } size={20}/>  {selectedCurrency?.item.name}</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
             <Image source={{uri: string}} style={styles.image} />
           </View>
           <Text style={styles.title}>{selectedCurrency?.item.name}</Text>
