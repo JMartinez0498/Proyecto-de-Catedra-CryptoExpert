@@ -10,8 +10,6 @@ const MyCryptoScreen = ({navigation}) => {
  
   
   return (
-    <>
-    <View style={styles.margin}></View>
     <View style={styles.base}>
       <Image source={require('../images/logo-dark.png')} style={styles.logo}/>
       <Text style={styles.text}>Para acceder a esta</Text> 
@@ -24,7 +22,6 @@ const MyCryptoScreen = ({navigation}) => {
       <Button title="         Inicia sesion         " color={colors.button} style={styles.button} 
         onPress={() => navigation.navigate('Login')} />
     </View>
-    </>
   );
 };
 
@@ -35,7 +32,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
     paddingHorizontal: 5,
-    paddingVertical: 5,
+    paddingVertical: 100,
     alignItems: 'center',
   },
   margin: {
@@ -47,11 +44,11 @@ const styles = StyleSheet.create({
   text: {
     color: colors.text,
     fontSize: 25,
-    paddingVertical: 20,
   },
   logo: {
     width: 220,
     height: 125,
+    marginBottom: 50,
   },
   button: {
     backgroundColor: colors.button,

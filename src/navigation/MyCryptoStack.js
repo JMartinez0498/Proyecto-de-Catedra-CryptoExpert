@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import MyCryptoScreen from '../screens/MyCryptoScreen';
-import Failed from '../screens/NewsScreen';
 import {colors} from '../util/colors';
 import {AuthContext} from '../authentication/AuthProvider';
+
+import MyCryptosTabStack from './myCryptosStacks/MyCryptosTabStack';
+import MyCryptoScreen from '../screens/MyCryptoScreen';
+
 const Stack = createStackNavigator();
 
 export default function MyCryptoStack() {
@@ -19,15 +21,15 @@ export default function MyCryptoStack() {
       }}>
       {user?
         <Stack.Screen
-          name="MyCryptos"
-          component={Failed}
+          name="Home"
+          component={MyCryptosTabStack}
           options={{
             title: 'MyCryptos',
           }}
         />
       :
         <Stack.Screen
-          name="MyCryptoStack"
+          name="Forbidden"
           component={MyCryptoScreen}
           options={{
             title: 'MyCryptos',

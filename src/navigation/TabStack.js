@@ -32,9 +32,10 @@ export default function TabStack() {
         }}
       />
       <Tab.Screen
-        name="MyCryptos"
+        name="MyCryptosStack"
         component={MyCryptoStack}
         options={{
+          title: 'MyCryptos',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="bitcoin" color={color} size={26} />
           ),
