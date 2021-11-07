@@ -3,11 +3,17 @@ import {createStackNavigator} from '@react-navigation/stack';
 import MyCryptoScreen from '../screens/MyCryptoScreen';
 import Failed from '../screens/NewsScreen';
 import {colors} from '../util/colors';
+//Vieja impl
 import {AuthContext} from '../authentication/AuthProvider';
+
+//Nueva impl
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, db, logout } from "../firebase/firebase";
 const Stack = createStackNavigator();
 
 export default function MyCryptoStack() {
-  const {user} =useContext(AuthContext);
+  const [user, loading, error] = useAuthState(auth);
+
   return (
     <Stack.Navigator
       screenOptions={{

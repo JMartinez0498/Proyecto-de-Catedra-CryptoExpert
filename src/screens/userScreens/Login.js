@@ -9,16 +9,19 @@ import {
   StyleSheet,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {AuthContext} from '../../authentication/AuthProvider';
-
 import {colors} from '../../util/colors';
 
-const LoginScreen = ({navigation}) => {
-  const {login} = useContext(AuthContext);
 
+
+//Prueba nueva impl
+import { auth, signInWithEmail, signInGoogle } from "../../firebase/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+
+const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
-
+  const [user, loading, error] = useAuthState(auth);
+  
   return (
     <ScrollView style={styles.base}>
       <View style={styles.logoContainer}>
@@ -48,7 +51,7 @@ const LoginScreen = ({navigation}) => {
         title="Acceder"
         color={colors.button}
         onPress={async () => {
-          await login(email, pass);
+          await signInWithEmail(email, pass);
           navigation.goBack();
         }}
       />
@@ -58,6 +61,14 @@ const LoginScreen = ({navigation}) => {
           No tienes una cuenta?, crea una aquí
         </Text>
       </TouchableOpacity>
+        <TouchableOpacity
+        >
+          <Image
+              style={styles.tinyLogo}
+              source={require('../../images/google.png')}
+              onPress={signInGoogle}
+          />
+        </TouchableOpacity>
     </ScrollView>
   );
 };

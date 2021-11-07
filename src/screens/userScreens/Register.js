@@ -1,15 +1,22 @@
 import React, { useContext, useState } from 'react';
 import {View, Text, Button, Image,TextInput,StyleSheet,TouchableOpacity} from 'react-native';
 import {colors} from '../../util/colors';
+//Vieja Conf
 import { AuthContext } from '../../authentication/AuthProvider';
+//Prueba nueva conf
+import { useAuthState } from "react-firebase-hooks/auth";
+import {  auth, registerEmail, signInGoogle} from "../../firebase/firebase";
 
 const register = () => {
   const [email,setEmail] = useState();
   const [nombre,setNombre] = useState();
   const [password,setPassword] = useState();
   const [confirmPassword,setConfirmPassword] = useState();
+  const [user,loading,error]=useAuthState(auth);
 
-  const {register} = useContext(AuthContext);
+  const register = () =>{
+    registerEmail(nombre,email,password);
+  }
 
   return (
     <>
@@ -24,12 +31,12 @@ const register = () => {
       <TextInput style={styles.input} onChangeText={(pass=>setPassword(pass))} ></TextInput>
 
       <View style={styles.marginBottom}>
-        <Button title="Registrarse" color={colors.button} style={styles.button} onPress={() =>register(email,password)} />
+        <Button title="Registrarse" color={colors.button} style={styles.button} onPress={() =>register(nombre,email,password)} />
       </View>
 
       <View style={styles.opcion}>
         <Text style={styles.text}>o</Text>
-        <Text style={styles.text}>Registrate con Google(Próximamente)</Text>
+        <Text style={styles.text}>Registrate con Google</Text>
       </View>
       <View style={styles.opcion}>
         <TouchableOpacity
@@ -37,6 +44,7 @@ const register = () => {
           <Image
               style={styles.tinyLogo}
               source={require('../../images/google.png')}
+              onPress={signInGoogle}
           />
         </TouchableOpacity>
       </View>

@@ -5,14 +5,22 @@ import TabStack from './TabStack';
 import LoginStack from './userStacks/LoginStack';
 import RegisterStack from './userStacks/RegisterStack'
 import {colors} from '../util/colors';
-import auth from'@react-native-firebase/auth';
+//Prueba implementacion
+//import auth from'@react-native-firebase/auth';
 import { AuthContext } from '../authentication/AuthProvider';
+
+//Nueva implementacion
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, db, logout } from "../firebase/firebase";
+
 import {NavigationContainer} from '@react-navigation/native';
 const Stack = createStackNavigator();
 
 export default function MyTabs() {
   
-  const {user,setUser} = useContext(AuthContext);
+  //const [user, loading, error] = useAuthState(auth);
+
+  /*const {user,setUser} = useContext(AuthContext);
   const [initializing, setinitializing] = useState(true);
 
   const onAuthStateChanged = (user) =>{
@@ -29,7 +37,8 @@ export default function MyTabs() {
 
   if(initializing) {
     return null;
-  }
+  }*/
+
   return (
     <NavigationContainer>
       <Stack.Navigator
