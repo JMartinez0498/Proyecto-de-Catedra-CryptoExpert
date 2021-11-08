@@ -9,7 +9,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   ToastAndroid,
-  ActivityIndicator
 } from 'react-native';
 import {colors} from '../../util/colors';
 import CustomModal from '../../components/CustomModal';
@@ -18,7 +17,7 @@ import {checkNumber} from '../../util/utilFunctions'
 
 import { auth, save } from "../../firebase/firebase";
 
-const Buy = () => {
+const Buy = ({navigation}) => {
   const [user, loading, error] = useAuthState(auth);
 
   const [toBuy, setToBuy] = useState(0)
@@ -33,16 +32,15 @@ const Buy = () => {
     symbol: "BTC",
     image: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
   })
-  const [price, setPrice] = useState(0);
+  const [coinData, setCoinData] = useState(0);
   const [showModal, setShowModal] = useState(false)
 
   const getCoinPrice = async (coinId) => {
-    await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd`)
+    await fetch(`https://api.coingecko.com/api/v3/coins/markets?ids=${coinId.toLowerCase()}&vs_currency=usd`)
     .then(resp => resp.json())
     .then(data => {
-      coinId = coinId.toLowerCase()
-      let price = parseFloat(data[coinId].usd);
-      setPrice(price)
+      let price = parseFloat(data[0].current_price);
+      setCoinData(data[0])
       setToBuyCoin(convert(price))
     })
     .catch(e => { 
@@ -51,7 +49,7 @@ const Buy = () => {
   }
 
   const convert = (newPrice) => {
-    let factor = price
+    let factor = coinData.current_price
     if (newPrice) {
       factor = newPrice
     }
@@ -91,11 +89,25 @@ const Buy = () => {
     if (isValid && toBuy != "" && parseFloat(toBuy) > 0) {
       save("trading", {
         coin: selectedCoin.symbol,
-        invested: toBuy,
-        bought: toBuyCoin,
+        invested: parseFloat(toBuy),
+        bought: parseFloat(toBuyCoin),
         type: 1,
         date: date,
         user_id: user.uid
+      })
+      .then(()=>{
+        save("cryptos", {
+          coin: selectedCoin.symbol,
+          image: coinData.image,
+          invest: parseFloat(toBuy),
+          profit: 0,
+          holdings: parseFloat(toBuy),
+          holdingsBTC: parseFloat(toBuyCoin),
+          id_user: user.uid
+        })
+      })
+      .then(()=>{
+        navigation.navigate("MyCryptosStack")
       })
       .catch(e => {
         console.log("Error guardando compra: " + e)

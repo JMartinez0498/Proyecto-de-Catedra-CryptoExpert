@@ -31,7 +31,7 @@ const LoginScreen = ({navigation}) => {
     }  
     signInWithEmailAndPassword(email, pass);
     if(user){
-      navigation.goBack();
+      navigation.navigate("MyCryptosStack");
     }
     
   }
