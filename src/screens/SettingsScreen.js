@@ -1,27 +1,31 @@
 import React, {useContext} from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {AuthContext} from '../authentication/AuthProvider';
-
+//import {AuthContext} from '../authentication/AuthProvider';
+import { auth, db, logout } from "../firebase/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 import {colors} from '../util/colors';
 
 const SettingsScreen = ({navigation}) => {
-  const {user, logout} = useContext(AuthContext);
-
+  //const {user, logout} = useContext(AuthContext);
+  const [user, loading, error] = useAuthState(auth);
+  console.info("Variable user=", JSON.stringify(user));
   return (
     <View style={styles.base}>
       <View style={styles.options}>
         {user ? (
           <View style={styles.message}>
-            <Text style={[styles.text]}>Hola de nuevo, {user.email}</Text>
+            <Text style={[styles.text]}>Hola de nuevo, </Text>
+            <Text style={{color: colors.accent}}>{user.email}</Text>
           </View>
         ) : (
           <View />
         )}
+        <View style={styles.divider} />
         <TouchableOpacity
           onPress={() => {
             if (user) {
-              console.log();
+              navigation.navigate('MyAccount');
             } else {
               navigation.navigate('Login');
             }
@@ -61,8 +65,8 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   message: {
-    flexDirection: 'column',
-    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
     paddingHorizontal: 30,
   },
   options: {
