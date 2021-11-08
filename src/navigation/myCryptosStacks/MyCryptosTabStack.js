@@ -2,7 +2,8 @@ import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 import BalanceScreen from '../../screens/myCryptosScreens/Balance';
-import StatisticsScreen from '../../screens/myCryptosScreens/Statistics';
+import BuyScreen from '../../screens/myCryptosScreens/Buy';
+import SellScreen from '../../screens/myCryptosScreens/Sell';
 
 import {colors} from '../../util/colors';
 const Tab = createMaterialTopTabNavigator();
@@ -28,10 +29,17 @@ export default function MyCryptosTabStack() {
         }}
       />
       <Tab.Screen
-        name="Estadisticas"
-        component={StatisticsScreen}
+        name="Comprar"
+        component={BuyScreen}
         options={{
-          titleBarLabel: 'Estadísticas',
+          titleBarLabel: 'Comprar',
+        }}
+      />
+      <Tab.Screen
+        name="Vender"
+        component={SellScreen}
+        options={{
+          titleBarLabel: 'Vender',
         }}
       />
     </Tab.Navigator>

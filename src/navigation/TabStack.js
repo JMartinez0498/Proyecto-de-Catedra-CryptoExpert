@@ -16,8 +16,9 @@ const Tab = createMaterialBottomTabNavigator();
 export default function TabStack() {
   return (
     <Tab.Navigator
-      barStyle={{backgroundColor: colors.backgroundDark}}
-      activeColor={colors.accent}>
+        barStyle={{backgroundColor: colors.backgroundDark}}
+        activeColor={colors.accent}
+      >
       <Tab.Screen
         name="Inicio"
         component={HomeStack}

@@ -4,7 +4,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import TabStack from './TabStack';
 import LoginStack from './userStacks/LoginStack';
 import RegisterStack from './userStacks/RegisterStack'
-import ResetPass from './userStacks/ResetPass'
+import ResetPassStack from './userStacks/ResetPassStack'
+import MyAccountStack from './userStacks/MyAccountStack';
 import {colors} from '../util/colors';
 
 //Nueva implementacion
@@ -44,7 +45,14 @@ export default function MyTabs() {
         />
         <Stack.Screen
           name="ResetPass"
-          component={ResetPass}
+          component={ResetPassStack}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="MyAccount"
+          component={MyAccountStack}
           options={{
             headerShown: false,
           }}

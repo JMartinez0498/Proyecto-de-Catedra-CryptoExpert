@@ -30,7 +30,7 @@ const register = ({navigation}) => {
     var result=registerWithEmailAndPassword(nombre,email,password);
     getInformation()
     console.info("Resultado del Registro = "+JSON.stringify(result));
-    navigation.goBack();
+    navigation.navigate("MyCryptosStack")
   }
 
   return (

@@ -15,15 +15,17 @@ const SettingsScreen = ({navigation}) => {
       <View style={styles.options}>
         {user ? (
           <View style={styles.message}>
-            <Text style={[styles.text]}>Hola de nuevo</Text>
+            <Text style={[styles.text]}>Hola de nuevo, </Text>
+            <Text style={{color: colors.accent}}>{user.email}</Text>
           </View>
         ) : (
           <View />
         )}
+        <View style={styles.divider} />
         <TouchableOpacity
           onPress={() => {
             if (user) {
-              console.log();
+              navigation.navigate('MyAccount');
             } else {
               navigation.navigate('Login');
             }
@@ -63,8 +65,8 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   message: {
-    flexDirection: 'column',
-    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
     paddingHorizontal: 30,
   },
   options: {

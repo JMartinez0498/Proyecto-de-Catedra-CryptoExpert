@@ -1,79 +1,115 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  Button,
-  Image,
-  TextInput,
   StyleSheet,
-  TouchableOpacity} from 'react-native';
+  ActivityIndicator
+} from 'react-native';
 import {colors} from '../../util/colors';
-import CustomButton from '../../components/CustomButton'
-
-const Table = () => {
-  return (
-    <View>
-
-    </View>
-  );
-}
+//import CustomButton from '../../components/CustomButton'
+import CustomTable from '../../components/CustomTable'
 
 const Balance = ({navigation}) => {
-  const [filtro,setFiltro] = useState('');
+  //const [filtro,setFiltro] = useState('');
+  const [totals, setTotals] = useState({})
+  const [isLoading, setIsLoading] = useState(true)
   const [cryptos, setCryptos] = useState([
     {
       id: 1,
-      code: 'BTC',
+      coin: 'BTC',
       image: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579',
-      invest: 100,
-      holdings: 135,
-      holdingsBTC: 0.0022
+      invest: 100,         // Lo que el usuario invirtió
+      profit: 0,          // Lo que el usuario vendió y obtuvo de lucro
+      holdings: 135,       // El valor actual en cartera de lo invertido, Este estará cambiando según el valor del mercado
+      holdingsBTC: 0.0022, // Lo mismo que arriba pero en Bitcoin, este solo cambiará cuando se compre o venda la moneda nuevamente
+      id_user: 1
     },
     {
       id: 2,
-      code: 'ETH',
+      coin: 'ETH',
       image: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880',
       invest: 20,
+      profit: 0,
       holdings: 18.57,
-      holdingsBTC: 0.00030
+      holdingsBTC: 0.00030,
+      id_user: 1
     }
   ]);
+
+  const calculateTotals = () => {
+    let valorActual = 0;
+    let comprado = 0; 
+    let vendido = 0;
+    let lucro = 0; 
+    let lucroP = 0;
+    cryptos.map((item) => {
+      valorActual += parseFloat(item.holdings);
+      comprado += parseFloat(item.invest);
+      vendido += parseFloat(item.profit);
+      // lucro = valor actual - (comprado - vendido)
+      // lucro = 43.57 - (100 - 100) = 43.57
+      // lucro = 23.57 - (100 - 120) = 43.57
+      lucro += (parseFloat(item.holdings) - (parseFloat(item.invest) - parseFloat(item.profit)))
+    })
+    valorActual = Math.floor(valorActual * 100) / 100
+    lucro = Math.floor(lucro * 100) / 100
+    let porcentaje = Math.floor(((lucro / comprado) * 100) * 100) / 100;
+    if (porcentaje > 0) {
+      lucroP = "(+"+ (porcentaje) +"%)"
+    } else if (porcentaje < 0) {
+      lucroP = "(-"+ (porcentaje*-1) +"%)"
+    } else {
+      lucroP = "("+ (porcentaje) +"%)"
+    }
+
+    setTotals({
+      valorActual,
+      comprado,
+      vendido,
+      lucro,
+      lucroP
+    })
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    calculateTotals()
+  }, [cryptos])
 
   return (
     <View style={styles.base}>
       <Text style={[styles.text,styles.title]}>Saldo actual</Text>
       
-      <Text style={[styles.text,styles.balance]}>$ 100.55</Text>
+      <Text style={[styles.text,styles.balance]}>{ isLoading ? <ActivityIndicator /> : ("$ " + totals.valorActual) }</Text>
       <View>
         <View style={styles.data}>
-          <Text style={styles.text}>Total invertido:</Text>
-          <Text style={styles.text}>$ 120</Text>
+          <Text style={styles.text}>Total comprado:</Text>
+          <Text style={styles.text}>{ isLoading ? <ActivityIndicator /> : ("$ " + totals.comprado) }</Text>
+        </View>
+        <View style={styles.data}>
+          <Text style={styles.text}>Total vendido:</Text>
+          <Text style={styles.text}>{ isLoading ? <ActivityIndicator /> : ("$ " + totals.vendido) }</Text>
         </View>
         <View style={styles.data}>
           <Text style={styles.text}>Total Ganado/Perdido: </Text>
-          <Text style={ false ? styles.textRed : styles.textGreen }>$ 33.57 (+22%)</Text>
+          <Text style={ !isLoading && totals.lucro < 0 ? styles.textRed : styles.textGreen }>
+            { isLoading ? <ActivityIndicator /> : ("$ " + totals.lucro + " " + totals.lucroP) }
+          </Text>
         </View>
         <View style={styles.buttonPanel}>
           <View style={styles.filters}>
-            <CustomButton
+            {/* <CustomButton
               title="BTC/USD"
               onPress={() => console.log('Filtrar por compras CUSTOM')}
-            />
-            <CustomButton
-              title="1H"
-              icon="arrow-drop-down"
-              onPress={() => console.log('Filtrar por compras CUSTOM')}
-            />
+            /> */}
           </View>
-          <CustomButton
-              title="INVERTIR"
-              icon="add"
-              onPress={() => console.log('Filtrar por compras CUSTOM')}
-            />
         </View>
       </View>
       <View style={styles.divider} />
-
+      <CustomTable 
+        cryptos={cryptos}
+        setCryptos={setCryptos}
+      />
     </View>
   );
 }
@@ -123,9 +159,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   divider: {
-    height: 15,
+    height: 5,
+    paddingBottom: 15,
     borderBottomColor: colors.gray,
     borderBottomWidth: 1,
-    marginBottom: 15
   },
 });

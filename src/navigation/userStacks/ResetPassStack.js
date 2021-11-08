@@ -5,7 +5,7 @@ import ResetPass from '../../screens/userScreens/ResetPass';
 import {colors} from '../../util/colors';
 const Stack = createStackNavigator();
 
-export default function LoginStack() {
+export default function ResetPassStack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -16,7 +16,7 @@ export default function LoginStack() {
         },
       }}>
       <Stack.Screen
-        name="Reset"
+        name="ResetStack"
         component={ResetPass}
         options={{
           title: 'Cambiar Contraseña',
