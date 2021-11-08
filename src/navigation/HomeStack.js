@@ -5,6 +5,7 @@ import HomeScreen from '../screens/HomeScreen';
 import Search from '../components/Search';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import CoinDetail from '../screens/CoinDetail';
 
 import {colors} from '../util/colors';
 
@@ -44,6 +45,20 @@ export default function HomeStack({navigation}) {
       <Stack.Screen
         name="HomeStack"
         component={HomeScreen}
+        options={{
+          title: '',
+        }}
+      />
+      <Stack.Screen
+        name="SearchStack"
+        component={Search}
+        options={{
+          title: '',
+        }}
+      />
+      <Stack.Screen
+        name="CoinStack"
+        component={CoinDetail}
         options={{
           title: '',
         }}

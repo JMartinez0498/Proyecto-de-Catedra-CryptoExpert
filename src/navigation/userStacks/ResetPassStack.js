@@ -1,10 +1,11 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import NewsScreen from '../screens/NewsScreen';
-import {colors} from '../util/colors';
+import ResetPass from '../../screens/userScreens/ResetPass';
+
+import {colors} from '../../util/colors';
 const Stack = createStackNavigator();
 
-export default function NewsStack() {
+export default function ResetPassStack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -15,10 +16,10 @@ export default function NewsStack() {
         },
       }}>
       <Stack.Screen
-        name="NewsStack"
-        component={NewsScreen}
+        name="ResetStack"
+        component={ResetPass}
         options={{
-          title: 'News',
+          title: 'Cambiar Contraseña',
         }}
       />
     </Stack.Navigator>

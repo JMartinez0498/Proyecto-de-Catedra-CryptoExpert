@@ -16,8 +16,9 @@ const Tab = createMaterialBottomTabNavigator();
 export default function TabStack() {
   return (
     <Tab.Navigator
-      barStyle={{backgroundColor: colors.backgroundDark}}
-      activeColor={colors.accent}>
+        barStyle={{backgroundColor: colors.backgroundDark}}
+        activeColor={colors.accent}
+      >
       <Tab.Screen
         name="Inicio"
         component={HomeStack}
@@ -32,9 +33,10 @@ export default function TabStack() {
         }}
       />
       <Tab.Screen
-        name="MyCryptos"
+        name="MyCryptosStack"
         component={MyCryptoStack}
         options={{
+          title: 'MyCryptos',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="bitcoin" color={color} size={26} />
           ),

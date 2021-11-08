@@ -1,5 +1,7 @@
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, {useState, useEffect} from "react";
-import {View, Text, StyleSheet, Image} from 'react-native'
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native'
 import {colors} from '../util/colors';
 
 const Coin_Item=(props)=>{

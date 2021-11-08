@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {View, Text, StyleSheet, FlatList,TouchableOpacity} from 'react-native';
 import {colors} from '../util/colors';
 import Coin_Item from '../components/Coin_Item';
 
 
-const Home = () => {
+const Home = ({navigation}) => {
 
   const [coins, setCoins] = useState([])
 
   const loadData = async () =>{
-    const res = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false");
+    const res = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=7d");
     const data = await res.json()
     setCoins(data)
   }
@@ -20,6 +20,7 @@ const Home = () => {
 
 
   return (
+    
     <View style={styles.base}>
       <View style={styles.container}>
         <Text style={styles.name}>Moneda</Text>
@@ -29,14 +30,21 @@ const Home = () => {
       </View>
       <FlatList
         data={coins}
+        //keyExtractor={({id}) => {id.toString()}}
         renderItem={(item)=>{
           return (
+            <TouchableOpacity
+            onPress={() =>navigation.navigate("CoinStack", {currency : item})}
+            //onPress={() =>console.log({currency : item})}
+            >
             <Coin_Item coin={item} />
+            </TouchableOpacity>
           )
         }}
         showsVerticalScrollIndicator={false}
       />
     </View>
+    
   );
 };
 

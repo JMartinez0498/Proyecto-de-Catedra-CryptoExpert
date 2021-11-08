@@ -9,16 +9,33 @@ import {
   StyleSheet,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {AuthContext} from '../../authentication/AuthProvider';
-
 import {colors} from '../../util/colors';
+//Prueba nueva impl
+import { auth, signInWithEmailAndPassword , signInWithGoogle} from "../../firebase/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const LoginScreen = ({navigation}) => {
-  const {login} = useContext(AuthContext);
-
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
+  const [user, loading, error] = useAuthState(auth);
 
+  const login=()=>{
+
+    if(email == '' || email.length < 1){
+      alert("Ingresa tu Email")
+      return
+    }
+    if(pass == '' || pass.length < 1){
+        alert("Ingresa tu Contraña")
+        return
+    }  
+    signInWithEmailAndPassword(email, pass);
+    if(user){
+      navigation.goBack();
+    }
+    
+  }
+  
   return (
     <ScrollView style={styles.base}>
       <View style={styles.logoContainer}>
@@ -41,15 +58,14 @@ const LoginScreen = ({navigation}) => {
         value={pass}
         secureTextEntry={true}
       />
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+      <TouchableOpacity onPress={() => navigation.navigate('ResetPass')}>
         <Text style={styles.link}>Olvidé mi contraseña...</Text>
       </TouchableOpacity>
       <Button
         title="Acceder"
         color={colors.button}
         onPress={async () => {
-          await login(email, pass);
-          navigation.goBack();
+          login()
         }}
       />
 
@@ -58,6 +74,13 @@ const LoginScreen = ({navigation}) => {
           No tienes una cuenta?, crea una aquí
         </Text>
       </TouchableOpacity>
+        <TouchableOpacity onPress={signInWithGoogle} style={styles.imageG} >
+          <Image
+              style={styles.tinyLogo}
+              source={require('../../images/google.png')}
+              
+          />
+        </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -97,5 +120,12 @@ const styles = StyleSheet.create({
   centered: {
     textAlign: 'center',
     marginTop: 30,
+  },
+  imageG:{
+    alignItems:'center',
+  },
+  tinyLogo: {
+    width: 40,
+    height: 40,
   },
 });
