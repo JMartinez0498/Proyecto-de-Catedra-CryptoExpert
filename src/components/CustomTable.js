@@ -40,7 +40,7 @@ export default function CustomTable(props) {
   const Row = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate("MyAccount")}
+        onPress={() => navigation.navigate("CoinStatitics", {currency : item})}
       >
         <View style={styles.row}>
           <View style={[styles.cell, styles.cellStyle]}>

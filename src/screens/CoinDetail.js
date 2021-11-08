@@ -97,7 +97,7 @@ const CoinDetail = ({route, navigation}) => {
           <VictoryChart
           
             width={375}
-            domain={{x: [167, 0]}}
+            domain={{x: [0,167]}}
             theme={VictoryTheme.material}>
             <VictoryLine
               data={price}

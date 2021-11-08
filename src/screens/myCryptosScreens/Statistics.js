@@ -18,25 +18,60 @@ import {
   VictoryTheme,
   VictoryAxis,
 } from 'victory-native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 
-const Statitics = ({navigation}) => {
-  let priceChange = 10;
+const Statitics = ({route, navigation}) => {
+  const [selectedCurrency, setSelectedCurrency] = React.useState(null);
+  React.useEffect(() => {
+    const {currency} = route.params;
+    setSelectedCurrency(currency)
+  },[]) 
 
-  let invest = 1500;
-  let holdings = 2500;
+  console.log(selectedCurrency?.holdings)
+  
+  let invest = selectedCurrency?.invest;
+  let holdings = selectedCurrency?.holdings;
+
+  function renderHeader() {
+    return (
+      <View style={styles.base}>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 15,
+            alignItems: 'flex-start',
+          }}>
+          <View>
+            <View style={styles.base}>
+              <View style={styles.containerb}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Text style={styles.texth}>
+                    <FontAwesomeIcon
+                      icon={faArrowLeft}
+                      style={styles.icon}
+                      size={20}
+                    />{' '} Estadisticas                        </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  }
 
 
   return (
     <SafeAreaView style={styles.basearea}>
       <ScrollView>
+      <View style={styles.container}>{renderHeader()}</View>
         <View style={styles.based}>
         <View style={styles.basec}>
           <Text style={styles.title2}> $ {holdings}</Text>
         </View>
         <View style={styles.basec}>
-      
         <View style={styles.baseb}>
-          <Text style={priceChange > 0 ? styles.priceChange : styles.priceChangeNegative}>10%</Text>
         </View>
         </View></View>
         <VictoryChart theme={VictoryTheme.material} domainPadding={{x: 130}}>
