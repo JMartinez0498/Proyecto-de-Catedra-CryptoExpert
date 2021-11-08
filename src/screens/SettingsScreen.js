@@ -1,19 +1,21 @@
 import React, {useContext} from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {AuthContext} from '../authentication/AuthProvider';
-
+//import {AuthContext} from '../authentication/AuthProvider';
+import { auth, db, logout } from "../firebase/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 import {colors} from '../util/colors';
 
 const SettingsScreen = ({navigation}) => {
-  const {user, logout} = useContext(AuthContext);
-
+  //const {user, logout} = useContext(AuthContext);
+  const [user, loading, error] = useAuthState(auth);
+  console.info("Variable user=", JSON.stringify(user));
   return (
     <View style={styles.base}>
       <View style={styles.options}>
         {user ? (
           <View style={styles.message}>
-            <Text style={[styles.text]}>Hola de nuevo, {user.email}</Text>
+            <Text style={[styles.text]}>Hola de nuevo</Text>
           </View>
         ) : (
           <View />

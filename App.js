@@ -8,7 +8,7 @@
 
 import React, {useEffect} from 'react';   
 import {StatusBar} from 'react-native';
-import Providers from './src/navigation';
+import Navigation from './src/navigation/Navigation';
 import {colors} from './src/util/colors';
 
 import SplashScreen from 'react-native-splash-screen';
@@ -24,7 +24,8 @@ const App = () => {
         backgroundColor={colors.backgroundDark}
         barStyle="light-content"
       />
-        <Providers />
+        <Navigation />
+       
     </>
   );
 };
