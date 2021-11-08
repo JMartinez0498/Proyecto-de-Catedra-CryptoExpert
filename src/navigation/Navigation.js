@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import TabStack from './TabStack';
 import LoginStack from './userStacks/LoginStack';
 import RegisterStack from './userStacks/RegisterStack'
+import SearchStack from './userStacks/SearchStack';
 import {colors} from '../util/colors';
 import auth from'@react-native-firebase/auth';
 import { AuthContext } from '../authentication/AuthProvider';
@@ -52,6 +53,13 @@ export default function MyTabs() {
         <Stack.Screen
           name="Register"
           component={RegisterStack}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Search"
+          component={SearchStack}
           options={{
             headerShown: false,
           }}
