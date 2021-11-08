@@ -1,15 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {View, Text, Button, Image,TextInput,StyleSheet,TouchableOpacity} from 'react-native';
 import {colors} from '../../util/colors';
-import { AuthContext } from '../../authentication/AuthProvider';
 
 const MyAccount = () => {
   const [email,setEmail] = useState();
   const [nombre,setNombre] = useState();
   const [password,setPassword] = useState('123456');
   const [confirmPassword,setConfirmPassword] = useState();
-
-  const {user,register} = useContext(AuthContext);
 
   return (
     <>
@@ -18,7 +15,7 @@ const MyAccount = () => {
       <TextInput style={styles.input} onChangeText={(nombre=> setNombre(nombre))} ></TextInput>
 
       <Text style={styles.text}>Correo</Text>
-      <TextInput style={styles.input} onChangeText={(mail=>setEmail(mail))}> {user.email} </TextInput>
+      <TextInput style={styles.input} onChangeText={(mail=> setEmail(mail))}>  </TextInput>
 
       <Text style={styles.text}>Contraseña</Text>
       <TextInput
