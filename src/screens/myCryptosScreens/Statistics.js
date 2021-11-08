@@ -22,19 +22,22 @@ import {
 const Statitics = ({navigation}) => {
   let priceChange = 10;
 
-  let inversion = 1500;
-  let carteta = 2500;
+  let invest = 1500;
+  let holdings = 2500;
+
 
   return (
     <SafeAreaView style={styles.basearea}>
       <ScrollView>
+        <View style={styles.based}>
         <View style={styles.basec}>
-          <Text style={styles.title2}> $ 14000</Text>
+          <Text style={styles.title2}> $ {holdings}</Text>
         </View>
         <View style={styles.basec}>
-
+      
         <View style={styles.baseb}>
-          <Text style={priceChange > 0 ? styles.priceChange : styles.priceChangeNegative}>-10%</Text>
+          <Text style={priceChange > 0 ? styles.priceChange : styles.priceChangeNegative}>10%</Text>
+        </View>
         </View></View>
         <VictoryChart theme={VictoryTheme.material} domainPadding={{x: 130}}>
           <VictoryBar
@@ -44,8 +47,8 @@ const Statitics = ({navigation}) => {
               data: {fill: '#F4D35E'},
             }}
             data={[
-              {x: 'Inversion', y: inversion},
-              {x: 'Cartera', y: carteta},
+              {x: 'Inversion', y: invest},
+              {x: 'Cartera', y: holdings},
             ]}
           />
         </VictoryChart>
@@ -53,6 +56,8 @@ const Statitics = ({navigation}) => {
     </SafeAreaView>
   );
 };
+
+
 
 export default Statitics;
 
@@ -73,11 +78,22 @@ const styles = StyleSheet.create({
   },
   basec: {
     flex: 1,
+    
     backgroundColor: colors.background,
     paddingHorizontal: 15,
     paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'flex-end',
+  },
+  based: {
+    flex: 1,
+    backgroundColor: colors.background,
+    borderBottomColor: colors.gray,
+borderBottomWidth: 1,
+borderTopColor: colors.gray,
+borderTopWidth: 1,
+    paddingHorizontal: 1,
+    paddingVertical: 5,
   },
   basearea: {
     flex: 1,
@@ -106,6 +122,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   title2: {
+ 
     color: colors.text,
     fontSize: 30,
     marginLeft: 10,
