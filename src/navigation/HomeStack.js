@@ -49,13 +49,14 @@ export default function HomeStack({navigation}) {
           title: '',
         }}
       />
-      <Stack.Screen
-        name="SearchStack"
-        component={Search}
-        options={{
-          title: '',
-        }}
-      />
+
+
+
+
+
+
+
+
       <Stack.Screen
         name="CoinStack"
         component={CoinDetail}

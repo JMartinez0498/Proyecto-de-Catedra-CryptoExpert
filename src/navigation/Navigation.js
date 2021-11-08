@@ -1,6 +1,6 @@
 import React, { useEffect, useState,useContext } from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-
+import SearchStack from './userStacks/SearchStack';
 import TabStack from './TabStack';
 import LoginStack from './userStacks/LoginStack';
 import RegisterStack from './userStacks/RegisterStack'
@@ -53,6 +53,13 @@ export default function MyTabs() {
         <Stack.Screen
           name="MyAccount"
           component={MyAccountStack}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Search"
+          component={SearchStack}
           options={{
             headerShown: false,
           }}
