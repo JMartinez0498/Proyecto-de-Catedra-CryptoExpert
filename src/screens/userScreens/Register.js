@@ -1,37 +1,55 @@
 import React, { useContext, useState } from 'react';
 import {View, Text, Button, Image,TextInput,StyleSheet,TouchableOpacity} from 'react-native';
 import {colors} from '../../util/colors';
-//Vieja Conf
-import { AuthContext } from '../../authentication/AuthProvider';
 //Prueba nueva conf
 import { useAuthState } from "react-firebase-hooks/auth";
-import {  auth, registerEmail, signInGoogle} from "../../firebase/firebase";
+import {  auth, registerWithEmailAndPassword, signInWithGoogle,getInformation} from "../../firebase/firebase";
+import { NavigationContainer } from '@react-navigation/native';
 
-const register = () => {
+const register = ({navigation}) => {
   const [email,setEmail] = useState();
   const [nombre,setNombre] = useState();
   const [password,setPassword] = useState();
   const [confirmPassword,setConfirmPassword] = useState();
   const [user,loading,error]=useAuthState(auth);
-
   const register = () =>{
-    registerEmail(nombre,email,password);
+
+    if(nombre == '' || nombre.length < 1){
+      alert("Ingresa tu Nombre")
+      return
+    }  
+    
+    if(email == '' || email.length < 1){
+        alert("Ingresa tu Email")
+        return
+    }
+    if(password == '' || password.length < 1){
+        alert("Ingresa tu Contraseña")
+        return
+    }  
+    var result=registerWithEmailAndPassword(nombre,email,password);
+    getInformation()
+    console.info("Resultado del Registro = "+JSON.stringify(result));
+    navigation.goBack();
   }
 
   return (
     <>
     <View style={styles.base}>
       <Text style={styles.text}>Nombre</Text>
-      <TextInput style={styles.input} onChangeText={(nombre=> setNombre(nombre))} ></TextInput>
+      <TextInput style={styles.input} textContentType="name" onChangeText={(nombre=> setNombre(nombre))} re ></TextInput>
 
       <Text style={styles.text}>Correo</Text>
-      <TextInput style={styles.input} onChangeText={(mail=>setEmail(mail))} ></TextInput>
+      <TextInput style={styles.input} textContentType="emailAddress" onChangeText={(mail=>setEmail(mail))} ></TextInput>
 
       <Text style={styles.text}>Contraseña</Text>
-      <TextInput style={styles.input} onChangeText={(pass=>setPassword(pass))} ></TextInput>
+      <TextInput style={styles.input} textContentType="password" onChangeText={(pass=>setPassword(pass))} secureTextEntry={true} ></TextInput>
 
       <View style={styles.marginBottom}>
-        <Button title="Registrarse" color={colors.button} style={styles.button} onPress={() =>register(nombre,email,password)} />
+        <Button title="Registrarse" color={colors.button} style={styles.button} onPress={async () => {
+            register(nombre,email,password);
+            
+            }} />
       </View>
 
       <View style={styles.opcion}>
@@ -39,12 +57,11 @@ const register = () => {
         <Text style={styles.text}>Registrate con Google</Text>
       </View>
       <View style={styles.opcion}>
-        <TouchableOpacity
+        <TouchableOpacity onPress={signInWithGoogle}
         >
           <Image
               style={styles.tinyLogo}
               source={require('../../images/google.png')}
-              onPress={signInGoogle}
           />
         </TouchableOpacity>
       </View>
