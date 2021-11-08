@@ -27,9 +27,8 @@ const register = ({navigation}) => {
         alert("Ingresa tu Contraseña")
         return
     }  
-    var result=registerWithEmailAndPassword(nombre,email,password);
-    getInformation()
-    console.info("Resultado del Registro = "+JSON.stringify(result));
+    registerWithEmailAndPassword(nombre,email,password);
+    //console.info("Resultado del Registro = "+getInformation(user.uid,"cryptos",).length);
     navigation.navigate("MyCryptosStack")
   }
 

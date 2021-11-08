@@ -41,7 +41,7 @@ const signInWithGoogle = async () => {
     }
   } catch (err) {
     console.error(err);
-    alert(err.message);
+    //alert(err.message);
   }
 };
 const signInWithEmailAndPassword = async (email, password) => {
@@ -63,7 +63,7 @@ const registerWithEmailAndPassword = async (name, email, password) => {
     });
   } catch (err) {
     console.error(err);
-    alert(err.message);
+   // alert(err.message);
   }
 };
 const sendPasswordResetEmail = async (email) => {
@@ -73,7 +73,7 @@ const sendPasswordResetEmail = async (email) => {
     alert("Revisa tu Correo Electronico");
   } catch (err) {
     console.error(err);
-    alert(err.message);
+    //alert(err.message);
   }
 };
 const logout = () => {
@@ -91,11 +91,19 @@ const save = async (collection,data)=>{
   }
 }
 
-var getInformation= async(idUser,collection)=>{
+const getInformation= async(idUser,collection)=>{
   try{
-      const query=await db.collection("users").where("authProvider","==","local").get();
-      const data= await query.docs.data();
-      console.log("Resultado de consulta prueba ="+JSON.stringify(data));
+    let array=[];
+      const query=await db.collection(collection).where("id_user","==",idUser).orderBy("invest","desc").get().then((querySnapshot)=>{
+        querySnapshot.forEach((doc)=>{
+          var obj=doc.data()
+          array.push(obj);
+          //console.info("Valor en for ="+obj)
+        });
+        return array;
+        //console.info("Estoy Dentro de aguait",array[0].name);
+      });
+     
   }catch(err){
     console.error(err);
     ToastAndroid.show("Ocurrio un Error al Intentar Cargar Tu Información, Intenta de Nuevo", ToastAndroid.LONG);

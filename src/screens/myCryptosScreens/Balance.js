@@ -8,33 +8,35 @@ import {
 import {colors} from '../../util/colors';
 //import CustomButton from '../../components/CustomButton'
 import CustomTable from '../../components/CustomTable'
+import {auth,db} from '../../firebase/firebase'
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Balance = ({navigation}) => {
   //const [filtro,setFiltro] = useState('');
   const [totals, setTotals] = useState({})
   const [isLoading, setIsLoading] = useState(true)
-  const [cryptos, setCryptos] = useState([
-    {
-      id: 1,
-      coin: 'BTC',
-      image: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579',
-      invest: 100,         // Lo que el usuario invirtió
-      profit: 0,          // Lo que el usuario vendió y obtuvo de lucro
-      holdings: 135,       // El valor actual en cartera de lo invertido, Este estará cambiando según el valor del mercado
-      holdingsBTC: 0.0022, // Lo mismo que arriba pero en Bitcoin, este solo cambiará cuando se compre o venda la moneda nuevamente
-      id_user: 1
-    },
-    {
-      id: 2,
-      coin: 'ETH',
-      image: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880',
-      invest: 20,
-      profit: 0,
-      holdings: 18.57,
-      holdingsBTC: 0.00030,
-      id_user: 1
+  const [user,loading,error]=useAuthState(auth);
+  
+  const getInformation= async()=>{
+    try{      
+      let array=[];
+        const query=await db.collection("cryptos").where("id_user","==",user.uid).orderBy("invest","desc").get().then((querySnapshot)=>{
+          querySnapshot.forEach((doc)=>{
+            var obj=doc.data()
+            array.push(obj);
+            console.info("Valor en for ="+JSON.stringify(obj))
+          });
+          //console.info("Estoy Dentro de aguait",array[0].name);
+          setCryptos(array);
+        });
+      
+    }catch(err){
+      console.error(err);
+      ToastAndroid.show("Ocurrio un Error al Intentar Cargar Tu Información, Intenta de Nuevo", ToastAndroid.LONG);
     }
-  ]);
+  }
+
+  const [cryptos, setCryptos] = useState([]);
 
   const calculateTotals = () => {
     let valorActual = 0;
@@ -75,6 +77,10 @@ const Balance = ({navigation}) => {
   useEffect(() => {
     calculateTotals()
   }, [cryptos])
+
+  useEffect(() => {
+    getInformation()
+  }, [])
 
   return (
     <View style={styles.base}>
