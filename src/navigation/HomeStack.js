@@ -6,6 +6,7 @@ import Search from '../components/Search';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CoinDetail from '../screens/CoinDetail';
+import Statitics from '../screens/myCryptosScreens/Statistics';
 
 import {colors} from '../util/colors';
 
@@ -60,6 +61,13 @@ export default function HomeStack({navigation}) {
       <Stack.Screen
         name="CoinStack"
         component={CoinDetail}
+        options={{
+          title: '',
+        }}
+      />
+      <Stack.Screen
+        name="CoinStatitics"
+        component={Statitics}
         options={{
           title: '',
         }}
