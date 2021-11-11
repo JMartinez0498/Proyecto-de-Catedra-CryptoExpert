@@ -18,7 +18,7 @@ function Logo(props) {
       <Image source={require('../images/logo-dark.png')} style={styles.logo} />
       <View style={styles.btnSearch}>
         <TouchableOpacity
-          onPress={() => props.navigation.navigate('SearchStack')}
+          onPress={() => props.navigation.navigate('Search')}
         >
         <FontAwesome
               name="search"
@@ -49,13 +49,14 @@ export default function HomeStack({navigation}) {
           title: '',
         }}
       />
-      <Stack.Screen
-        name="SearchStack"
-        component={Search}
-        options={{
-          title: '',
-        }}
-      />
+
+
+
+
+
+
+
+
       <Stack.Screen
         name="CoinStack"
         component={CoinDetail}
