@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   View,
@@ -13,8 +13,9 @@ import {colors} from '../../util/colors';
 //Prueba nueva impl
 import { auth, signInWithEmailAndPassword , signInWithGoogle} from "../../firebase/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { CommonActions } from '@react-navigation/native';
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = ({navigation: { goBack }}) => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const [user, loading, error] = useAuthState(auth);
@@ -29,13 +30,18 @@ const LoginScreen = ({navigation}) => {
         alert("Ingresa tu Contraña")
         return
     }  
-    signInWithEmailAndPassword(email, pass);
-    if(user){
-      navigation.navigate("MyCryptosStack");
-    }
-    
+    signInWithEmailAndPassword(email, pass)
   }
   
+  useEffect(() => {
+    console.log("Cargando: " + loading)
+    if (!loading && user) {
+      //navigation.navigate(CommonActions.goBack());
+      goBack()
+    }
+  }, [user])
+  
+
   return (
     <ScrollView style={styles.base}>
       <View style={styles.logoContainer}>

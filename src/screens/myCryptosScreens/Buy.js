@@ -22,7 +22,6 @@ const Buy = ({navigation}) => {
 
   const [toBuy, setToBuy] = useState(0)
   const [toBuyCoin, setToBuyCoin] = useState(0)
-  const [date, setDate] = useState(new Date());
   const [validationStyle, setValidationStyle] = useState({})
   const [isValid, setIsValid] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -84,37 +83,6 @@ const Buy = ({navigation}) => {
     }
   }, [toBuy, selectedCoin])
 
-  
-  useEffect(()=>{
-    verifyExist("eth").then((oldCrypto) => {
-      if (oldCrypto != undefined) {
-        console.log("test: " + oldCrypto.holdings)
-      }
-    })
-  }, [])
-
-  const getInformation = async()=>{
-    try{      
-      let array=[];
-      const query=await db.collection("cryptos")
-      .where("id_user","==",user.uid)
-      .orderBy("invest","desc")
-      .get().then((query)=>{
-        query.forEach((doc)=>{
-          var obj = doc.data()
-          array.push(obj);
-          console.info("Valor en for ="+JSON.stringify(obj))
-        });
-        //console.info("Estoy Dentro de aguait",array[0].name);
-        //setCryptos(array);
-      });
-      
-    }catch(err){
-      console.error(err);
-      ToastAndroid.show("Ocurrio un Error al Intentar Cargar Tu Información, Intenta de Nuevo", ToastAndroid.LONG);
-    }
-  }
-
   const verifyExist = async (symbol) => {
     //let symbol="eth"
     //console.log(user.uid + " " + coinData.symbol)
@@ -122,8 +90,7 @@ const Buy = ({navigation}) => {
     .where("id_user","==",user.uid)
     .where("coin","==",symbol).get()
     try {
-      const otraconst = loquequerrasponerle.docs[0].data()
-      console.log("UID: " + otraconst.id)
+      const otraconst = loquequerrasponerle.docs[0].data()      
       //console.log(JSON.stringify(loquequerrasponerle.docs[0]))
       return otraconst
     } catch (e) {
@@ -141,7 +108,7 @@ const Buy = ({navigation}) => {
         invested: parseFloat(toBuy),
         bought: parseFloat(toBuyCoin),
         type: 1,
-        date: date,
+        date: new Date(),
         user_id: user.uid
       })
       .then(()=>{
@@ -152,9 +119,9 @@ const Buy = ({navigation}) => {
             try {
               db.collection("cryptos").doc(oldCrypto.coin + user.uid).set({
                 ...oldCrypto,
-                invest: parseFloat(toBuy) + parseFloat(oldCrypto.invest),
-                holdings: parseFloat(toBuy) + parseFloat(oldCrypto.holdings),
-                holdingsBTC: parseFloat(toBuyCoin) + parseFloat(oldCrypto.holdingsBTC),
+                invest: (parseFloat(toBuy) + parseFloat(oldCrypto.invest)),
+                holdings: (parseFloat(toBuy) + parseFloat(oldCrypto.holdings)),
+                holdingsBTC: (parseFloat(toBuyCoin) + parseFloat(oldCrypto.holdingsBTC)).toFixed(8),
               })
               .then(() => {
                 console.log("Actualizado")
@@ -165,9 +132,10 @@ const Buy = ({navigation}) => {
           } else {
             db.collection("cryptos").doc(coinData.symbol + user.uid).set({
               coin: coinData.symbol,
+              coinName: coinData.name.toLowerCase(),
               image: coinData.image,
-              invest: parseFloat(toBuy),
               profit: 0,
+              invest: parseFloat(toBuy),
               holdings: parseFloat(toBuy),
               holdingsBTC: parseFloat(toBuyCoin),
               id_user: user.uid
@@ -177,7 +145,9 @@ const Buy = ({navigation}) => {
       })
       .then(()=>{
         setToBuy(0)
-        navigation.navigate("Balance")
+        setTimeout(()=> 
+          navigation.navigate("Balance")
+        ,1000)
       })
       .catch(e => {
         console.log("Error guardando compra: " + e)
@@ -224,6 +194,8 @@ const Buy = ({navigation}) => {
             visible={showModal}
             setVisibility={setShowModal}
             setCoin={setSelectedCoin}
+
+            modalType={1}
           />
         </View>
         <View style={styles.divider} />

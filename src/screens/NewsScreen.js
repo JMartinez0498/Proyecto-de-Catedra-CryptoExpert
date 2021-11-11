@@ -13,7 +13,7 @@ const NewsScreen = () => {
     const res = await fetch("https://newsapi.org/v2/everything?q=bitcoin&from=2021-11-07&to=2021-11-07&sortBy=popularity&apiKey=f43b37842fe54e40970127723ee95818");
     const data = await res.json()
     setDatos(JSON.stringify(data))
-    console.log(datos)
+    console.log("TEST" + datos)
   }
 
   useEffect(()=>{

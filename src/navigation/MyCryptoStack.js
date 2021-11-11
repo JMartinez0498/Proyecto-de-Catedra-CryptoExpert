@@ -6,14 +6,15 @@ import MyCryptosTabStack from './myCryptosStacks/MyCryptosTabStack';
 //Nueva impl
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db, logout } from "../firebase/firebase";
-import { View, ActivityIndicator } from 'react-native';
+import { Text, View, ActivityIndicator, StyleSheet } from 'react-native';
 const Stack = createStackNavigator();
 
 class Loading extends React.Component {
   render() {
     return (
-      <View style={{flex: 1,backgroundColor: colors.background, justifyContent: 'center'}}>
+      <View style={styles.base}>
         <ActivityIndicator size="large" />
+        <Text style={styles.text}>Cargando</Text>
       </View>
     )
   }
@@ -36,7 +37,7 @@ export default function MyCryptoStack() {
           name="LoadingScreen"
           component={Loading}
           options={{
-            title: 'loading',
+            title: '',
           }}
         />
       :
@@ -60,3 +61,17 @@ export default function MyCryptoStack() {
     </Stack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  base: {
+    flex: 1,
+    backgroundColor: colors.background,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  text: {
+    color: colors.textDisabled,
+    fontSize: 15
+  }
+})
