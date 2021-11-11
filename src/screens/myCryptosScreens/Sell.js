@@ -30,6 +30,7 @@ const Sell = ({navigation}) => {
     id:1,
     name: "Bitcoin",
     symbol: "BTC",
+    current_price: 66145,
     image: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
   })
   const [coinData, setCoinData] = useState(0);
@@ -120,12 +121,18 @@ const Sell = ({navigation}) => {
   return (
     <ScrollView style={styles.base}>
       <View>
+        <Text style={[styles.text,styles.title]}>Saldo disponible</Text>
+        <View style={[styles.inputForm,{justifyContent:'flex-end'}]}>
+          <Text style={[styles.tag,{color:colors.textDisabled}]}>$ 155</Text>
+        </View>
+        <View style={styles.divider} />
+      </View>
+      <View>
         <Text style={[styles.text,styles.title]}>Total a vender en USD</Text>
         <View style={styles.inputForm}>
           <Text style={styles.tag}>$</Text>
           <TextInput
             style={[styles.input, validationStyle]}
-            autoFocus={true}
             keyboardType="numeric"
             onChangeText={val => setToSell(val)}
             value={toSell.toString()}

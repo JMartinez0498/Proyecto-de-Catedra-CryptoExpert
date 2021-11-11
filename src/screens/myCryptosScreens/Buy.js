@@ -15,7 +15,7 @@ import CustomModal from '../../components/CustomModal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {checkNumber} from '../../util/utilFunctions'
 
-import { auth, save } from "../../firebase/firebase";
+import { auth, db, save } from "../../firebase/firebase";
 
 const Buy = ({navigation}) => {
   const [user, loading, error] = useAuthState(auth);
@@ -29,7 +29,8 @@ const Buy = ({navigation}) => {
   const [selectedCoin, setSelectedCoin] = useState({
     id:1,
     name: "Bitcoin",
-    symbol: "BTC",
+    symbol: "btc",
+    current_price: 66145,
     image: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
   })
   const [coinData, setCoinData] = useState(0);
@@ -83,6 +84,54 @@ const Buy = ({navigation}) => {
     }
   }, [toBuy, selectedCoin])
 
+  
+  useEffect(()=>{
+    verifyExist("eth").then((oldCrypto) => {
+      if (oldCrypto != undefined) {
+        console.log("test: " + oldCrypto.holdings)
+      }
+    })
+  }, [])
+
+  const getInformation = async()=>{
+    try{      
+      let array=[];
+      const query=await db.collection("cryptos")
+      .where("id_user","==",user.uid)
+      .orderBy("invest","desc")
+      .get().then((query)=>{
+        query.forEach((doc)=>{
+          var obj = doc.data()
+          array.push(obj);
+          console.info("Valor en for ="+JSON.stringify(obj))
+        });
+        //console.info("Estoy Dentro de aguait",array[0].name);
+        //setCryptos(array);
+      });
+      
+    }catch(err){
+      console.error(err);
+      ToastAndroid.show("Ocurrio un Error al Intentar Cargar Tu Información, Intenta de Nuevo", ToastAndroid.LONG);
+    }
+  }
+
+  const verifyExist = async (symbol) => {
+    //let symbol="eth"
+    //console.log(user.uid + " " + coinData.symbol)
+    const loquequerrasponerle = await db.collection("cryptos")
+    .where("id_user","==",user.uid)
+    .where("coin","==",symbol).get()
+    try {
+      const otraconst = loquequerrasponerle.docs[0].data()
+      console.log("UID: " + otraconst.id)
+      //console.log(JSON.stringify(loquequerrasponerle.docs[0]))
+      return otraconst
+    } catch (e) {
+      console.log("Error verifyExist: " + e)
+      return undefined
+    }
+  }
+
   const buy = () => {
     console.log(isValid && toBuy != "" && parseFloat(toBuy) > 0)
 
@@ -96,18 +145,39 @@ const Buy = ({navigation}) => {
         user_id: user.uid
       })
       .then(()=>{
-        save("cryptos", {
-          coin: selectedCoin.symbol,
-          image: coinData.image,
-          invest: parseFloat(toBuy),
-          profit: 0,
-          holdings: parseFloat(toBuy),
-          holdingsBTC: parseFloat(toBuyCoin),
-          id_user: user.uid
+        verifyExist(selectedCoin.symbol)
+        .then((oldCrypto) => {
+          if (oldCrypto != undefined) {
+            //const ref = db.ref()
+            try {
+              db.collection("cryptos").doc(oldCrypto.coin + user.uid).set({
+                ...oldCrypto,
+                invest: parseFloat(toBuy) + parseFloat(oldCrypto.invest),
+                holdings: parseFloat(toBuy) + parseFloat(oldCrypto.holdings),
+                holdingsBTC: parseFloat(toBuyCoin) + parseFloat(oldCrypto.holdingsBTC),
+              })
+              .then(() => {
+                console.log("Actualizado")
+              })
+            } catch(e) {
+              console.log(e)
+            }
+          } else {
+            db.collection("cryptos").doc(coinData.symbol + user.uid).set({
+              coin: coinData.symbol,
+              image: coinData.image,
+              invest: parseFloat(toBuy),
+              profit: 0,
+              holdings: parseFloat(toBuy),
+              holdingsBTC: parseFloat(toBuyCoin),
+              id_user: user.uid
+            })
+          }
         })
       })
       .then(()=>{
-        navigation.navigate("MyCryptosStack")
+        setToBuy(0)
+        navigation.navigate("Balance")
       })
       .catch(e => {
         console.log("Error guardando compra: " + e)
@@ -123,7 +193,6 @@ const Buy = ({navigation}) => {
           <Text style={styles.tag}>$</Text>
           <TextInput
             style={[styles.input, validationStyle]}
-            autoFocus={true}
             keyboardType="numeric"
             onChangeText={val => setToBuy(val)}
             value={toBuy.toString()}

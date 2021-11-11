@@ -3,7 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import {colors} from '../../util/colors';
 //import CustomButton from '../../components/CustomButton'
@@ -15,28 +16,47 @@ const Balance = ({navigation}) => {
   //const [filtro,setFiltro] = useState('');
   const [totals, setTotals] = useState({})
   const [isLoading, setIsLoading] = useState(true)
+  const [cryptos, setCryptos] = useState([]);
   const [user,loading,error]=useAuthState(auth);
   
-  const getInformation= async()=>{
+  const getInformation= async() => {
     try{      
-      let array=[];
-        const query=await db.collection("cryptos").where("id_user","==",user.uid).orderBy("invest","desc").get().then((querySnapshot)=>{
-          querySnapshot.forEach((doc)=>{
-            var obj=doc.data()
-            array.push(obj);
-            console.info("Valor en for ="+JSON.stringify(obj))
-          });
-          //console.info("Estoy Dentro de aguait",array[0].name);
-          setCryptos(array);
-        });
-      
+      let array=[]
+      await db.collection("cryptos").where("id_user","==",user.uid).orderBy("invest","desc").get().then((querySnapshot)=>{
+        querySnapshot.forEach((doc)=>{
+          let obj = doc.data()
+          array.push(obj);
+          //console.info("Valor en for ="+JSON.stringify(obj))
+        })
+        console.info("Terminé, hoy guardaré en array.");
+        setIsLoading(false);
+        setCryptos(array);
+      })
     }catch(err){
       console.error(err);
       ToastAndroid.show("Ocurrio un Error al Intentar Cargar Tu Información, Intenta de Nuevo", ToastAndroid.LONG);
     }
   }
-
-  const [cryptos, setCryptos] = useState([]);
+  const updatePrices = async (oldCryptos) => {
+    let newCryptos = []
+    let coins = oldCryptos.map((item)=>(item.coinName)).join(",")
+    console.log("Evaluando: " + coins)
+    await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coins}&vs_currencies=usd`)
+    .then(resp => resp.json())
+    .then(data => {
+      oldCryptos.map((obj) => {
+        let price = data[obj.coinName].usd
+        let newHoldings = Math.ceil((price * obj.holdingsBTC) * 100)/100
+        console.log("Nuevo price: " + price + ", nuevo holdings: " + newHoldings)
+        obj.holdings = newHoldings
+        newCryptos.push(obj)
+      })
+      return newCryptos
+    })
+    .catch(e => {
+      console.log("Error updatePrices: " + e);
+    })
+  }
 
   const calculateTotals = () => {
     let valorActual = 0;
@@ -71,16 +91,37 @@ const Balance = ({navigation}) => {
       lucro,
       lucroP
     })
-    setIsLoading(false)
   }
 
   useEffect(() => {
-    calculateTotals()
+    if (!isLoading && cryptos.length != 0) {
+      updatePrices(cryptos)
+      .then((newCryptos) => {
+        if (newCryptos != undefined) {
+          setCryptos(newCryptos)
+          // AQUI SE PUEDE IR A GUARDAR DE NUEVO A LA BASE
+        }
+      })
+      .then(() => {
+        calculateTotals()
+      })
+      .catch(e => {
+        console.log(e)
+      })
+    }
   }, [cryptos])
 
   useEffect(() => {
     getInformation()
   }, [])
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getInformation()
+      console.log("getInformation?")
+    });
+    return unsubscribe;
+  }, [navigation])
 
   return (
     <View style={styles.base}>
@@ -114,7 +155,7 @@ const Balance = ({navigation}) => {
       <View style={styles.divider} />
       <CustomTable 
         cryptos={cryptos}
-        setCryptos={setCryptos}
+        isLoading={isLoading}
       />
     </View>
   );
