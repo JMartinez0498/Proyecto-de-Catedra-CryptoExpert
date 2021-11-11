@@ -7,7 +7,7 @@
  */
 
 import React, {useEffect} from 'react';   
-import {StatusBar} from 'react-native';
+import {StatusBar,LogBox} from 'react-native';
 import Navigation from './src/navigation/Navigation';
 import {colors} from './src/util/colors';
 
@@ -18,6 +18,7 @@ const App = () => {
   useEffect(() => {
     SplashScreen.hide();
   }, []);
+  LogBox.ignoreAllLogs(true)
   return (
     <>
       <StatusBar

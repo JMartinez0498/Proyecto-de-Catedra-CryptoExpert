@@ -45,12 +45,14 @@ const Balance = ({navigation}) => {
     .then(resp => resp.json())
     .then(data => {
       oldCryptos.map((obj) => {
-        let price = data[obj.coinName].usd
-        let newHoldings = Math.ceil((price * obj.holdingsBTC) * 100)/100
-        console.log("Nuevo price: " + price + ", nuevo holdings: " + newHoldings)
-        obj.holdings = newHoldings
+        let price = parseFloat(data[obj.coinName].usd)
+        let newHoldings = parseFloat(Math.ceil((price * parseFloat(obj.holdingsBTC)) * parseFloat(100))/parseFloat(100))        
+        console.log("Nuevo price: " + price + ", nuevo holdings: " + newHoldings.toFixed(2))
+        obj.holdings = newHoldings.toFixed(4)
+        obj.holdingsBTC = parseFloat(obj.holdingsBTC).toFixed(4)
         newCryptos.push(obj)
       })
+      console.log(" newCryptos update"+ newCryptos.length)
       return newCryptos
     })
     .catch(e => {
@@ -96,14 +98,17 @@ const Balance = ({navigation}) => {
   useEffect(() => {
     if (!isLoading && cryptos.length != 0) {
       updatePrices(cryptos)
-      .then((newCryptos) => {
-        if (newCryptos != undefined) {
-          setCryptos(newCryptos)
-          // AQUI SE PUEDE IR A GUARDAR DE NUEVO A LA BASE
+      .then((arrCryp) => {
+        //console.log("new Cryptos use Effect "+JSON.stringify(newCryptos));
+        if (arrCryp != undefined) {
+          setCryptos(arrCryp)
+          console.log("Guardando datos")
+          
         }
       })
       .then(() => {
         calculateTotals()
+        updateDB()
       })
       .catch(e => {
         console.log(e)
@@ -111,17 +116,30 @@ const Balance = ({navigation}) => {
     }
   }, [cryptos])
 
-  useEffect(() => {
-    getInformation()
-  }, [])
+
+  const updateDB=()=>{
+    try{
+      console.log("Estoy Guardando tamanio="+cryptos.length)      
+      cryptos.forEach((coinData)=>{
+        console.log("coindata"+JSON.stringify(coinData))
+        db.collection("cryptos").doc(coinData.coin + user.uid).set(coinData)      
+      })
+    }catch(e){
+      console.log(e)
+    }
+  }
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const interval=setInterval(()=>{
       getInformation()
-      console.log("getInformation?")
-    });
-    return unsubscribe;
-  }, [navigation])
+      updatePrices(cryptos)
+      //updateDB()
+      console.log("Me corro cada 30 segundos")
+    },30000)
+  }, [])
+
+
+
 
   return (
     <View style={styles.base}>
