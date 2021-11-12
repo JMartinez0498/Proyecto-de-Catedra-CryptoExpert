@@ -64,6 +64,13 @@ export default function HomeStack({navigation}) {
           title: '',
         }}
       />
+      <Stack.Screen
+        name="Search"
+        component={Search}
+        options={{
+          title: '',
+        }}
+      />
     </Stack.Navigator>
   );
 }

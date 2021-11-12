@@ -31,17 +31,14 @@ class News extends Component {
         ) : (
           <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
             {this.state.news.map((news, index) => (
-                <TouchableOpacity 
-                key={index} 
-                //onPress={() => this.props.navigation.navigate('WebView', {url: news.url})}
-                >
+                
               <View style={styles.new}>
                 <View style={styles.newTxt}>
                     <Text style={styles.title}>
                     {(news.title).substring(0,60)}...
                     </Text>
                     <Text style={styles.description}>
-                    {(news.description).substring(0,30)}...
+                    {news.description=== null ? news.description : (news.description).substring(0,30)}...
                     </Text>
                 </View>
                 <Image
@@ -49,7 +46,7 @@ class News extends Component {
                   style={styles.img}
                 />
               </View>
-              </TouchableOpacity>
+              
             ))}
           </ScrollView>
         )}

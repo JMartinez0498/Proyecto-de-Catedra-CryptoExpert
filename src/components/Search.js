@@ -5,9 +5,9 @@ import Coin_Search from '../components/Coin_Search';
 import { TextInput } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/Feather';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Alert } from 'react-native';
+import HeaderBar from '../components/HeaderBar';
 
-export default function Search() {
+export default function Search(props) {
 
     const [coins, setCoins] = useState([])
     const [search, setSearch] = useState('busqueda')
@@ -36,6 +36,7 @@ export default function Search() {
 
   return (
     <View style={styles.base}>
+      <HeaderBar />
       <View style={styles.title}>
         <View>
         <TouchableOpacity
@@ -62,7 +63,12 @@ export default function Search() {
         }
         renderItem={(item)=>{
           return (
-            <Coin_Search coin={item} />
+            <TouchableOpacity
+              //onPress={() =>navigation.navigate("CoinStack", {currency : item})}
+              onPress={() =>console.log("hola")}
+            >
+              <Coin_Search coin={item} />
+            </TouchableOpacity>
           )
         }}
         showsVerticalScrollIndicator={false}

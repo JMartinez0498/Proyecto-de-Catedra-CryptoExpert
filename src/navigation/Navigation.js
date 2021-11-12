@@ -7,7 +7,7 @@ import RegisterStack from './userStacks/RegisterStack'
 import ResetPassStack from './userStacks/ResetPassStack'
 import MyAccountStack from './userStacks/MyAccountStack';
 import {colors} from '../util/colors';
-
+import NewsViewStack from './NewsViewStack';
 //Nueva implementacion
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db, logout } from "../firebase/firebase";
@@ -53,13 +53,6 @@ export default function MyTabs() {
         <Stack.Screen
           name="MyAccount"
           component={MyAccountStack}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="Search"
-          component={SearchStack}
           options={{
             headerShown: false,
           }}
