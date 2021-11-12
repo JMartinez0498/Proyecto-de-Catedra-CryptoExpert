@@ -6,6 +6,7 @@ import Search from '../components/Search';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CoinDetail from '../screens/CoinDetail';
+import Statitics from '../screens/myCryptosScreens/Statistics';
 
 import {colors} from '../util/colors';
 
@@ -18,7 +19,7 @@ function Logo(props) {
       <Image source={require('../images/logo-dark.png')} style={styles.logo} />
       <View style={styles.btnSearch}>
         <TouchableOpacity
-          onPress={() => props.navigation.navigate('SearchStack')}
+          onPress={() => props.navigation.navigate('Search')}
         >
         <FontAwesome
               name="search"
@@ -49,16 +50,31 @@ export default function HomeStack({navigation}) {
           title: '',
         }}
       />
+
+
+
+
+
+
+
+
       <Stack.Screen
-        name="SearchStack"
-        component={Search}
+        name="CoinStack"
+        component={CoinDetail}
         options={{
           title: '',
         }}
       />
       <Stack.Screen
-        name="CoinStack"
-        component={CoinDetail}
+        name="CoinStatitics"
+        component={Statitics}
+        options={{
+          title: '',
+        }}
+      />
+      <Stack.Screen
+        name="Search"
+        component={Search}
         options={{
           title: '',
         }}

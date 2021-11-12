@@ -7,8 +7,8 @@
  */
 
 import React, {useEffect} from 'react';   
-import {StatusBar} from 'react-native';
-import Providers from './src/navigation';
+import {StatusBar,LogBox} from 'react-native';
+import Navigation from './src/navigation/Navigation';
 import {colors} from './src/util/colors';
 
 import SplashScreen from 'react-native-splash-screen';
@@ -18,13 +18,15 @@ const App = () => {
   useEffect(() => {
     SplashScreen.hide();
   }, []);
+  LogBox.ignoreAllLogs(true)
   return (
     <>
       <StatusBar
         backgroundColor={colors.backgroundDark}
         barStyle="light-content"
       />
-        <Providers />
+        <Navigation />
+       
     </>
   );
 };

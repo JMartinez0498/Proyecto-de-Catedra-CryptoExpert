@@ -1,12 +1,11 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import NewsScreen from '../screens/NewsScreen';
-import {colors} from '../util/colors';
-import NewsViewScreen from '../screens/NewsViewScreen';
+import Search from '../../components/Search';
 
+import {colors} from '../../util/colors';
 const Stack = createStackNavigator();
 
-export default function NewsStack() {
+export default function SearchStack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -17,18 +16,10 @@ export default function NewsStack() {
         },
       }}>
       <Stack.Screen
-        name="NewsStack"
-        component={NewsScreen}
+        name="SearchScreen"
+        component={Search}
         options={{
-          title: 'News',
-        }}
-      />
-
-      <Stack.Screen
-        name="NewsViewScreen"
-        component={NewsViewScreen}
-        options={{
-          title: '',
+          title: 'Búsqueda',
         }}
       />
     </Stack.Navigator>

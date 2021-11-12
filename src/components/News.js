@@ -1,13 +1,12 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import {ActivityIndicator, ScrollView, View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {colors} from '../util/colors';
 import {WebView} from 'react-native-webview';
 
-class NewsScreen extends Component {
+class News extends Component {
   state = {
     news: [],
   };
-
 
   componentDidMount() {
     fetch(
@@ -24,19 +23,15 @@ class NewsScreen extends Component {
       });
   }
 
-  render(props) {
+  render() {
     return (
-      <View style={styles.base}>
+      <View>
         {this.state.news.length === 0 ? (
           <ActivityIndicator color="white" size="large" />
         ) : (
           <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
             {this.state.news.map((news, index) => (
-                <TouchableOpacity 
-                key={index} 
-                //onPress={() => this.props.navigation.navigate('WebView', {url: news.url})}
-                onPress={() => this.props.navigation.navigate('NewsViewScreen', {url: news.url})}
-                >
+                
               <View style={styles.new}>
                 <View style={styles.newTxt}>
                     <Text style={styles.title}>
@@ -51,7 +46,7 @@ class NewsScreen extends Component {
                   style={styles.img}
                 />
               </View>
-              </TouchableOpacity>
+              
             ))}
           </ScrollView>
         )}
@@ -60,7 +55,7 @@ class NewsScreen extends Component {
   }
 }
 
-export default NewsScreen;
+export default News;
 
 const styles = StyleSheet.create({
     base: {

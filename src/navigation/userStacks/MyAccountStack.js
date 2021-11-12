@@ -1,12 +1,11 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import NewsScreen from '../screens/NewsScreen';
-import {colors} from '../util/colors';
-import NewsViewScreen from '../screens/NewsViewScreen';
+import MyAccountScreen from '../../screens/userScreens/MyAccount';
 
+import {colors} from '../../util/colors';
 const Stack = createStackNavigator();
 
-export default function NewsStack() {
+export default function MyAccountStack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -17,18 +16,10 @@ export default function NewsStack() {
         },
       }}>
       <Stack.Screen
-        name="NewsStack"
-        component={NewsScreen}
+        name="MyAccountScreen"
+        component={MyAccountScreen}
         options={{
-          title: 'News',
-        }}
-      />
-
-      <Stack.Screen
-        name="NewsViewScreen"
-        component={NewsViewScreen}
-        options={{
-          title: '',
+          title: 'Mi Cuenta',
         }}
       />
     </Stack.Navigator>
