@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {colors} from '../../util/colors';
 import {
@@ -22,16 +23,37 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 
 const Statitics = ({route, navigation}) => {
+  
+  const [isLoading, setIsLoading] = useState(true)
   const [selectedCurrency, setSelectedCurrency] = React.useState(null);
   React.useEffect(() => {
+    if (selectedCurrency != null) {
+      setIsLoading(false)
+    } 
     const {currency} = route.params;
     setSelectedCurrency(currency)
   },[]) 
 
+  let precio = 0;
+  if (selectedCurrency != null)
+  {
+    precio = parseFloat(selectedCurrency?.holdings)
+  }
+
+  let inversion = 0;
+  if (selectedCurrency != null)
+  {
+    inversion = parseFloat(selectedCurrency?.invest)
+  }
+
+  useEffect(() => {
+    if (selectedCurrency != null) setIsLoading(false)
+  })
+
   console.log(selectedCurrency?.holdings)
-  
-  let invest = selectedCurrency?.invest;
-  let holdings = selectedCurrency?.holdings;
+  console.log(selectedCurrency?.invest)
+  console.log(selectedCurrency)
+
 
   function renderHeader() {
     return (
@@ -60,7 +82,7 @@ const Statitics = ({route, navigation}) => {
       </View>
     );
   }
-
+ 
 
   return (
     <SafeAreaView style={styles.basearea}>
@@ -68,25 +90,29 @@ const Statitics = ({route, navigation}) => {
       <View style={styles.container}>{renderHeader()}</View>
         <View style={styles.based}>
         <View style={styles.basec}>
-          <Text style={styles.title2}> $ {holdings}</Text>
+       
+           <Text style={styles.title2}> $ {precio.toFixed(2)}</Text>
+          
         </View>
         <View style={styles.basec}>
         <View style={styles.baseb}>
         </View>
         </View></View>
-        <VictoryChart theme={VictoryTheme.material} domainPadding={{x: 130}}>
-          <VictoryBar
-          barRatio={55}
-            barWidth={({index}) => index * 2 + 70}
-            style={{
-              data: {fill: '#F4D35E'},
-            }}
-            data={[
-              {x: 'Inversion', y: invest},
-              {x: 'Cartera', y: holdings},
-            ]}
-          />
-        </VictoryChart>
+        { isLoading ? <ActivityIndicator /> : 
+              <VictoryChart theme={VictoryTheme.material} domainPadding={{x: 130}}>
+                <VictoryBar
+                barRatio={55}
+                  barWidth={({index}) => index * 2 + 70}
+                  style={{
+                    data: {fill: '#F4D35E'},
+                  }}
+                  data={[
+                    {x: 'Invertido', y: inversion},
+                    {x: 'Valor en Cartera', y: precio},
+                  ]}
+                />
+              </VictoryChart> }
+        
       </ScrollView>
     </SafeAreaView>
   );
