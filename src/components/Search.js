@@ -7,7 +7,7 @@ import FontAwesome from 'react-native-vector-icons/Feather';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import HeaderBar from '../components/HeaderBar';
 
-export default function Search(props) {
+export default function Search({props,navigation}) {
 
     const [coins, setCoins] = useState([])
     const [search, setSearch] = useState('busqueda')
@@ -65,7 +65,8 @@ export default function Search(props) {
           return (
             <TouchableOpacity
               //onPress={() =>navigation.navigate("CoinStack", {currency : item})}
-              onPress={() =>console.log("hola")}
+             
+              onPress={() =>navigation.navigate("CoinStack", {currency : item})}
             >
               <Coin_Search coin={item} />
             </TouchableOpacity>
