@@ -14,7 +14,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import CustomButton from "./CustomButton";
 
 export default function CustomModal(props) {
-  const {visible, setVisibility, setCoin} = props;
+  const {visible, setVisibility, setCoin, sellCoins, modalType} = props;
   const [search, setSearch] = useState("")
   const [inputStyle,setInputStyle] = useState({borderBottomColor: colors.text})
   const [isLoading,setIsLoading] = useState(true);
@@ -33,8 +33,15 @@ export default function CustomModal(props) {
   }
 
   useEffect(() => {
-    setIsLoading(true)
-    getCoins()
+    //setIsLoading(true)
+    if (modalType == 1) {
+      getCoins()
+    } else {
+      if (sellCoins != undefined) {
+        setCoins(sellCoins)
+        setIsLoading(false)
+      }
+    }
   }, [])
 
   const Row = ({item}) => {

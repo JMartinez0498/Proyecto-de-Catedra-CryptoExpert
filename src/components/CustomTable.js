@@ -5,48 +5,26 @@ import { useNavigation } from '@react-navigation/native'
 import {colors} from '../util/colors';
 
 export default function CustomTable(props) {
-  let price = 0;
-  let newCryptos = [];
-  const {cryptos, setCryptos} = props;
+  const {cryptos, isLoading} = props;
   //const [cryptos, setCryptos] = useState([...rows]);
-  const [isLoading,setIsLoading] = useState(true);
   const navigation = useNavigation()
 
-  const updatePrices = async () => {
-    await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd`)
-    .then(resp => resp.json())
-    .then(data => {
-      price = data.bitcoin.usd;
-
-      cryptos.map((crypto) => {
-        crypto.holdings = Math.ceil((price * crypto.holdingsBTC) * 100)/100
-        newCryptos.push(crypto)
-      })
-    })
-    .then (() => {
-      setCryptos(newCryptos);
-      setIsLoading(false)
-    })
-    .catch(e => {
-      console.log("Error getPrice: " + e);
-    })
-  }
-
-  useEffect(() => {
+  /*useEffect(() => {
     newCryptos = [];
-    updatePrices()    
-  }, [])
+    updatePrices()
+  }, [])*/
+  
   //onPress={() => navigation.navigate("MyAccount", {currency : item})}
   const Row = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate("MyAccount")}
+        onPress={() => navigation.navigate("CoinStatitics", {currency : item})}
       >
         <View style={styles.row}>
           <View style={[styles.cell, styles.cellStyle]}>
             <View style={styles.doubleCell}>
               <Image style={styles.image} source={{uri: item.image}} />
-              <Text style={styles.text}>{item.coin}</Text>
+              <Text style={styles.text}>{item.coin.toUpperCase()}</Text>
             </View>
           </View>
           <View style={[styles.cell, styles.cellStyle]}>
@@ -58,7 +36,10 @@ export default function CustomTable(props) {
           <View style={[styles.cellBig,styles.cellStyle]}>
             <View style={[styles.doubleCell]}>
               <Text style={styles.text}>$ {item.holdings}</Text>
-              <Text style={styles.subText}>₿ {item.holdingsBTC}</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={[styles.subText,{fontWeight: 'bold'}]}>{item.holdingsBTC}</Text>
+                <Text style={styles.subText}> {item.coin.toUpperCase()}</Text>
+              </View>
             </View>
           </View>
         </View>
@@ -91,7 +72,7 @@ export default function CustomTable(props) {
           <FlatList
             data={cryptos}
             renderItem={Row}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.coin}
           />
       }
       

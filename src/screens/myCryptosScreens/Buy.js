@@ -9,40 +9,38 @@ import {
   StyleSheet,
   TouchableOpacity,
   ToastAndroid,
-  ActivityIndicator
 } from 'react-native';
 import {colors} from '../../util/colors';
 import CustomModal from '../../components/CustomModal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {checkNumber} from '../../util/utilFunctions'
 
-import { auth, save } from "../../firebase/firebase";
+import { auth, db, save } from "../../firebase/firebase";
 
-const Buy = () => {
+const Buy = ({navigation}) => {
   const [user, loading, error] = useAuthState(auth);
 
   const [toBuy, setToBuy] = useState(0)
   const [toBuyCoin, setToBuyCoin] = useState(0)
-  const [date, setDate] = useState(new Date());
   const [validationStyle, setValidationStyle] = useState({})
   const [isValid, setIsValid] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [selectedCoin, setSelectedCoin] = useState({
     id:1,
     name: "Bitcoin",
-    symbol: "BTC",
+    symbol: "btc",
+    current_price: 66145,
     image: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
   })
-  const [price, setPrice] = useState(0);
+  const [coinData, setCoinData] = useState(0);
   const [showModal, setShowModal] = useState(false)
 
   const getCoinPrice = async (coinId) => {
-    await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd`)
+    await fetch(`https://api.coingecko.com/api/v3/coins/markets?ids=${coinId.toLowerCase()}&vs_currency=usd`)
     .then(resp => resp.json())
     .then(data => {
-      coinId = coinId.toLowerCase()
-      let price = parseFloat(data[coinId].usd);
-      setPrice(price)
+      let price = parseFloat(data[0].current_price);
+      setCoinData(data[0])
       setToBuyCoin(convert(price))
     })
     .catch(e => { 
@@ -51,7 +49,7 @@ const Buy = () => {
   }
 
   const convert = (newPrice) => {
-    let factor = price
+    let factor = coinData.current_price
     if (newPrice) {
       factor = newPrice
     }
@@ -85,17 +83,71 @@ const Buy = () => {
     }
   }, [toBuy, selectedCoin])
 
+  const verifyExist = async (symbol) => {
+    //let symbol="eth"
+    //console.log(user.uid + " " + coinData.symbol)
+    const loquequerrasponerle = await db.collection("cryptos")
+    .where("id_user","==",user.uid)
+    .where("coin","==",symbol).get()
+    try {
+      const otraconst = loquequerrasponerle.docs[0].data()      
+      //console.log(JSON.stringify(loquequerrasponerle.docs[0]))
+      return otraconst
+    } catch (e) {
+      console.log("Error verifyExist: " + e)
+      return undefined
+    }
+  }
+
   const buy = () => {
     console.log(isValid && toBuy != "" && parseFloat(toBuy) > 0)
 
     if (isValid && toBuy != "" && parseFloat(toBuy) > 0) {
       save("trading", {
         coin: selectedCoin.symbol,
-        invested: toBuy,
-        bought: toBuyCoin,
+        invested: parseFloat(toBuy),
+        bought: parseFloat(toBuyCoin),
         type: 1,
-        date: date,
+        date: new Date(),
         user_id: user.uid
+      })
+      .then(()=>{
+        verifyExist(selectedCoin.symbol)
+        .then((oldCrypto) => {
+          if (oldCrypto != undefined) {
+            //const ref = db.ref()
+            try {
+              db.collection("cryptos").doc(oldCrypto.coin + user.uid).set({
+                ...oldCrypto,
+                invest: (parseFloat(toBuy) + parseFloat(oldCrypto.invest)),
+                holdings: (parseFloat(toBuy) + parseFloat(oldCrypto.holdings)),
+                holdingsBTC: (parseFloat(toBuyCoin) + parseFloat(oldCrypto.holdingsBTC)).toFixed(8),
+              })
+              .then(() => {
+                console.log("Actualizado")
+              })
+            } catch(e) {
+              console.log(e)
+            }
+          } else {
+            db.collection("cryptos").doc(coinData.symbol + user.uid).set({
+              coin: coinData.symbol,
+              coinName: coinData.name.toLowerCase(),
+              image: coinData.image,
+              profit: 0,
+              invest: parseFloat(toBuy),
+              holdings: parseFloat(toBuy),
+              holdingsBTC: parseFloat(toBuyCoin),
+              id_user: user.uid
+            })
+          }
+        })
+      })
+      .then(()=>{
+        setToBuy(0)
+        setTimeout(()=> 
+          navigation.navigate("Balance")
+        ,1000)
       })
       .catch(e => {
         console.log("Error guardando compra: " + e)
@@ -111,7 +163,6 @@ const Buy = () => {
           <Text style={styles.tag}>$</Text>
           <TextInput
             style={[styles.input, validationStyle]}
-            autoFocus={true}
             keyboardType="numeric"
             onChangeText={val => setToBuy(val)}
             value={toBuy.toString()}
@@ -143,6 +194,8 @@ const Buy = () => {
             visible={showModal}
             setVisibility={setShowModal}
             setCoin={setSelectedCoin}
+
+            modalType={1}
           />
         </View>
         <View style={styles.divider} />

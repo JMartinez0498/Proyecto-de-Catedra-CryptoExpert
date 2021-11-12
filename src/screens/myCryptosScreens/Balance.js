@@ -3,38 +3,62 @@ import {
   View,
   Text,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import {colors} from '../../util/colors';
 //import CustomButton from '../../components/CustomButton'
 import CustomTable from '../../components/CustomTable'
+import {auth,db} from '../../firebase/firebase'
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Balance = ({navigation}) => {
   //const [filtro,setFiltro] = useState('');
   const [totals, setTotals] = useState({})
   const [isLoading, setIsLoading] = useState(true)
-  const [cryptos, setCryptos] = useState([
-    {
-      id: 1,
-      coin: 'BTC',
-      image: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579',
-      invest: 100,         // Lo que el usuario invirtió
-      profit: 0,          // Lo que el usuario vendió y obtuvo de lucro
-      holdings: 135,       // El valor actual en cartera de lo invertido, Este estará cambiando según el valor del mercado
-      holdingsBTC: 0.0022, // Lo mismo que arriba pero en Bitcoin, este solo cambiará cuando se compre o venda la moneda nuevamente
-      id_user: 1
-    },
-    {
-      id: 2,
-      coin: 'ETH',
-      image: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880',
-      invest: 20,
-      profit: 0,
-      holdings: 18.57,
-      holdingsBTC: 0.00030,
-      id_user: 1
+  const [cryptos, setCryptos] = useState([]);
+  const [user,loading,error]=useAuthState(auth);
+  
+  const getInformation= async() => {
+    try{      
+      let array=[]
+      await db.collection("cryptos").where("id_user","==",user.uid).orderBy("invest","desc").get().then((querySnapshot)=>{
+        querySnapshot.forEach((doc)=>{
+          let obj = doc.data()
+          array.push(obj);
+          //console.info("Valor en for ="+JSON.stringify(obj))
+        })
+        console.info("Terminé, hoy guardaré en array.");
+        setIsLoading(false);
+        setCryptos(array);
+      })
+    }catch(err){
+      console.error(err);
+      ToastAndroid.show("Ocurrio un Error al Intentar Cargar Tu Información, Intenta de Nuevo", ToastAndroid.LONG);
     }
-  ]);
+  }
+  const updatePrices = async (oldCryptos) => {
+    let newCryptos = []
+    let coins = oldCryptos.map((item)=>(item.coinName)).join(",")
+    console.log("Evaluando: " + coins)
+    await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coins}&vs_currencies=usd`)
+    .then(resp => resp.json())
+    .then(data => {
+      oldCryptos.map((obj) => {
+        let price = parseFloat(data[obj.coinName].usd)
+        let newHoldings = parseFloat(Math.ceil((price * parseFloat(obj.holdingsBTC)) * parseFloat(100))/parseFloat(100))        
+        console.log("Nuevo price: " + price + ", nuevo holdings: " + newHoldings.toFixed(2))
+        obj.holdings = newHoldings.toFixed(4)
+        obj.holdingsBTC = parseFloat(obj.holdingsBTC).toFixed(4)
+        newCryptos.push(obj)
+      })
+      console.log(" newCryptos update"+ newCryptos.length)
+      return newCryptos
+    })
+    .catch(e => {
+      console.log("Error updatePrices: " + e);
+    })
+  }
 
   const calculateTotals = () => {
     let valorActual = 0;
@@ -69,12 +93,53 @@ const Balance = ({navigation}) => {
       lucro,
       lucroP
     })
-    setIsLoading(false)
   }
 
   useEffect(() => {
-    calculateTotals()
+    if (!isLoading && cryptos.length != 0) {
+      updatePrices(cryptos)
+      .then((arrCryp) => {
+        //console.log("new Cryptos use Effect "+JSON.stringify(newCryptos));
+        if (arrCryp != undefined) {
+          setCryptos(arrCryp)
+          console.log("Guardando datos")
+          
+        }
+      })
+      .then(() => {
+        calculateTotals()
+        updateDB()
+      })
+      .catch(e => {
+        console.log(e)
+      })
+    }
   }, [cryptos])
+
+
+  const updateDB=()=>{
+    try{
+      console.log("Estoy Guardando tamanio="+cryptos.length)      
+      cryptos.forEach((coinData)=>{
+        console.log("coindata"+JSON.stringify(coinData))
+        db.collection("cryptos").doc(coinData.coin + user.uid).set(coinData)      
+      })
+    }catch(e){
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    const interval=setInterval(()=>{
+      getInformation()
+      updatePrices(cryptos)
+      //updateDB()
+      console.log("Me corro cada 30 segundos")
+    },30000)
+  }, [])
+
+
+
 
   return (
     <View style={styles.base}>
@@ -108,7 +173,7 @@ const Balance = ({navigation}) => {
       <View style={styles.divider} />
       <CustomTable 
         cryptos={cryptos}
-        setCryptos={setCryptos}
+        isLoading={isLoading}
       />
     </View>
   );
