@@ -27,7 +27,7 @@ const Sell = ({navigation}) => {
   const [validationStyle, setValidationStyle] = useState({})
   const [isValid, setIsValid] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [isDisabled, setIsDisabled] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(true)
   const [showModal, setShowModal] = useState(false)
   // Valor actual de la moneda
   const [coinData, setCoinData] = useState(0);
@@ -52,6 +52,7 @@ const Sell = ({navigation}) => {
       })
       .then(() => {
         if (array.length != 0) {
+          
           console.info("Terminé, hoy guardaré en array. array: " + array.length);
           getCoins(array);
           setCryptos(array);
@@ -82,21 +83,7 @@ const Sell = ({navigation}) => {
       console.log("Error getCoins: " + e);
     })
   }
-/*
-  const getCoinPrice = async (coinId) => {
-    console.log("getCoinPrice coinId: " + coinId)
-    await fetch(`https://api.coingecko.com/api/v3/coins/markets?ids=${coinId.toLowerCase()}&vs_currency=usd`)
-    .then(resp => resp.json())
-    .then(data => {
-      let price = parseFloat(data[0].current_price)
-      setCoinData(data[0])
-      setToSellCoin(convert(current_price))
-    })
-    .catch(e => { 
-      console.log("Error getCoinPrices: " + e);
-    })
-  }
-*/
+
   const convert = (newPrice) => {
     //let factor = coinData.current_price
     //if (newPrice) {
@@ -118,22 +105,16 @@ const Sell = ({navigation}) => {
 
   useEffect(() => {
     if (selectedCoin.current_price != undefined) {
-      //getCoinPrice(selectedCoin.coinName)
+      //console.log("Por algún motivo entré a useEffect selectedCoin")
       setToSell(toSell)
       setToSellCoin(convert(selectedCoin.current_price))
       //console.log("selectedCoin: " + JSON.stringify(selectedCoin))
       setSelectedCrypto(findCrypto(selectedCoin))
       setIsLoading(false)
+      setIsDisabled(false)
     } 
     //setIsLoading(false)
   }, [selectedCoin])
-
-/*
-  useEffect(() => {
-    getCryptos()
-    console.log("TEST SELL")
-  }, [])
-*/
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -143,28 +124,31 @@ const Sell = ({navigation}) => {
   }, [navigation]);
 
   useEffect(()=>{
-    if (parseFloat(toSell) >= 0 && checkNumber(parseFloat(toSell))) {
-      setValidationStyle({color: colors.text})
+    if (!isDisabled) {
+      console.log("Por algún motivo entré a useEffect toSell")
+      if (parseFloat(toSell) >= 0 && checkNumber(parseFloat(toSell))) {
+        setValidationStyle({color: colors.text})
 
-      // Validacion que no sea más de lo poseido
-      if (parseFloat(toSell) > parseFloat(selectedCrypto.holdings)) {
-        setValidationStyle({color: 'yellow'})
+        // Validacion que no sea más de lo poseido
+        if (parseFloat(toSell) > parseFloat(selectedCrypto.holdings)) {
+          setValidationStyle({color: 'yellow'})
+          setIsValid(false)
+          ToastAndroid.show("Valor no válido", ToastAndroid.SHORT);
+          return
+        }
+
+        let conver = convert(selectedCoin.current_price);
+        if (conver == undefined) {
+          setToSellCoin(0)
+        } else {
+          setToSellCoin(conver)
+          setIsValid(true)
+        }
+      } else {
+        setValidationStyle({color: colors.red})
         setIsValid(false)
         ToastAndroid.show("Valor no válido", ToastAndroid.SHORT);
-        return
       }
-
-      let conver = convert(selectedCoin.current_price);
-      if (conver == undefined) {
-        setToSellCoin(0)
-      } else {
-        setToSellCoin(conver)
-        setIsValid(true)
-      }
-    } else {
-      setValidationStyle({color: colors.red})
-      setIsValid(false)
-      ToastAndroid.show("Valor no válido", ToastAndroid.SHORT);
     }
   }, [toSell])
 
@@ -238,16 +222,16 @@ const Sell = ({navigation}) => {
       <View>
         <Text style={[styles.text,styles.title]}>Saldo disponible</Text>
         <View style={[styles.inputForm,{justifyContent:'flex-end'}]}>
-          <Text style={[styles.tag,{color:colors.textDisabled}]}>
-            { isLoading ?
-              <ActivityIndicator />
+            { isDisabled ?
+              <Text style={{fontSize:15,color:colors.textDisabled}}>No hay monedas disponibles</Text>
               :
-              isDisabled ?
-              "No hay monedas disponibles"
+              isLoading ?
+                <ActivityIndicator />
               :
-              "$" + selectedCrypto.holdings
+              <Text style={[styles.tag,{color:colors.textDisabled}]}>
+                {"$" + selectedCrypto.holdings}
+              </Text>
             }
-          </Text>
         </View>
         <View style={styles.divider} />
       </View>
@@ -268,24 +252,36 @@ const Sell = ({navigation}) => {
       <View>
         <Text style={[styles.text,styles.title]}>Cantidad a vender</Text>
         <View style={styles.inputForm}>
-          <TextInput
-            style={styles.input}
-            editable={false}
-            value={toSellCoin.toString()}
-          />
+          { 
+            isDisabled ?
+            <View style={styles.input}>
+              <Text style={{fontSize:35,color:colors.textDisabled}}> 0.0</Text>
+            </View>
+            :
+              isLoading ?
+              <View style={styles.input}>
+                <ActivityIndicator size="large" />
+              </View>
+              :
+              <TextInput
+                style={styles.input}
+                editable={false}
+                value={toSellCoin.toString()}
+              />
+          }
           <TouchableOpacity
             style={styles.select}
             disabled={isDisabled}
             onPress={()=> setShowModal(true)}
           >
             { 
-              !isLoading ?
-                !isDisabled ?
-                  <Text style={styles.selectText}>{selectedCoin.symbol.toUpperCase()}</Text>
-                :
-                  <Text style={styles.selectText}>---</Text>
+              isDisabled ?
+                <Text style={styles.selectText}>---</Text>
               :
-                <ActivityIndicator />
+                isLoading ?
+                  <ActivityIndicator />
+                :
+                  <Text style={styles.selectText}>{selectedCoin.symbol.toUpperCase()}</Text>
             }
             <MaterialIcons 
               name="arrow-drop-down"
@@ -319,7 +315,7 @@ const Sell = ({navigation}) => {
         <Button
           title="Vender"
           onPress={() => sell()}
-          disabled={!isValid && !isDisabled}
+          disabled={isDisabled || !isValid}
           color={colors.button}
         />
       </View>

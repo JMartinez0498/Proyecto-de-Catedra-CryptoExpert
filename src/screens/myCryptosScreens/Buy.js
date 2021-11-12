@@ -64,6 +64,7 @@ const Buy = ({navigation}) => {
 
   useEffect(()=>{
     if (parseFloat(toBuy) >= 0 && checkNumber(parseFloat(toBuy))) {
+      setIsValid(true)
       setValidationStyle({color: colors.text})
       let conver = convert();
       if (conver == undefined) {
@@ -72,14 +73,9 @@ const Buy = ({navigation}) => {
         setToBuyCoin(conver)
       }
     } else {
-      if (toBuy == "") {
-        setValidationStyle({color: colors.text})
-        setIsValid(true)
-      } else {
-        setValidationStyle({color: colors.red})
-        setIsValid(false)
-        ToastAndroid.show("Valor no válido", ToastAndroid.SHORT);
-      }
+      setValidationStyle({color: colors.red})
+      setIsValid(false)
+      ToastAndroid.show("Valor no válido", ToastAndroid.SHORT);
     }
   }, [toBuy, selectedCoin])
 

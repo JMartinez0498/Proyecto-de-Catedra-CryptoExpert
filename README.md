@@ -18,7 +18,7 @@ Francisco Josué Gonzalez Portillo GP121514 </br>
 #Manuales
 Manual Tecnico https://drive.google.com/file/d/1rYVjzy1uQXYJvrw4yPwoZUg6PhdH0jsa/view?usp=sharing 
 <br />
-Manual de Usuario https://drive.google.com/file/d/1s8v9nn4gD8rB3X6Y5rYRr26vTRPiVfbV/view?usp=sharing
+Manual de Usuario https://drive.google.com/file/d/1pXklHR1sx4D5aWTf3Jy134yraaW5PkRp/view?usp=sharing
 
 #Video de Fase 2
 https://youtu.be/lwePfEj-dzY

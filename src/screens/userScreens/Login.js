@@ -15,7 +15,7 @@ import { auth, signInWithEmailAndPassword , signInWithGoogle} from "../../fireba
 import { useAuthState } from "react-firebase-hooks/auth";
 import { CommonActions } from '@react-navigation/native';
 
-const LoginScreen = ({navigation: { goBack }}) => {
+const LoginScreen = ({navigation, navigation: { goBack }}) => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const [user, loading, error] = useAuthState(auth);

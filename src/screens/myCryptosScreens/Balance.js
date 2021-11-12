@@ -48,8 +48,8 @@ const Balance = ({navigation}) => {
         let price = parseFloat(data[obj.coinName].usd)
         let newHoldings = parseFloat(Math.ceil((price * parseFloat(obj.holdingsBTC)) * parseFloat(100))/parseFloat(100))        
         console.log("Nuevo price: " + price + ", nuevo holdings: " + newHoldings.toFixed(2))
-        obj.holdings = newHoldings.toFixed(4)
-        obj.holdingsBTC = parseFloat(obj.holdingsBTC).toFixed(4)
+        obj.holdings = newHoldings
+        obj.holdingsBTC = parseFloat(obj.holdingsBTC)
         newCryptos.push(obj)
       })
       console.log(" newCryptos update"+ newCryptos.length)
@@ -158,7 +158,7 @@ const Balance = ({navigation}) => {
         <View style={styles.data}>
           <Text style={styles.text}>Total Ganado/Perdido: </Text>
           <Text style={ !isLoading && totals.lucro < 0 ? styles.textRed : styles.textGreen }>
-            { isLoading ? <ActivityIndicator /> :( (totals.lucro!=undefined?"$ " +totals.lucro:"$ 0" )+ " " +(totals.lucroP!=undefined?"$ " +totals.lucroP:"$ 0")) }
+            { isLoading ? <ActivityIndicator /> :( (totals.lucro!=undefined?"$ " +totals.lucro:"$ 0" )+ " " +(totals.lucroP!=undefined?"$ " +totals.lucroP:"(0%)")) }
           </Text>
         </View>
         <View style={styles.buttonPanel}>
