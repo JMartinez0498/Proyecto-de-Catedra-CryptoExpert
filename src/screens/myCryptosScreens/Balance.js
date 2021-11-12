@@ -145,20 +145,20 @@ const Balance = ({navigation}) => {
     <View style={styles.base}>
       <Text style={[styles.text,styles.title]}>Saldo actual</Text>
       
-      <Text style={[styles.text,styles.balance]}>{ isLoading ? <ActivityIndicator /> : ("$ " + totals.valorActual) }</Text>
+      <Text style={[styles.text,styles.balance]}>{ isLoading ? <ActivityIndicator /> :  totals.valorActual!=undefined?"$ "+totals.valorActual:"$ 0" }</Text>
       <View>
         <View style={styles.data}>
           <Text style={styles.text}>Total comprado:</Text>
-          <Text style={styles.text}>{ isLoading ? <ActivityIndicator /> : ("$ " + totals.comprado) }</Text>
+          <Text style={styles.text}>{ isLoading ? <ActivityIndicator /> : totals.comprado!=undefined?"$ "+totals.comprado:"$ 0" }</Text>
         </View>
         <View style={styles.data}>
           <Text style={styles.text}>Total vendido:</Text>
-          <Text style={styles.text}>{ isLoading ? <ActivityIndicator /> : ("$ " + totals.vendido) }</Text>
+          <Text style={styles.text}>{ isLoading ? <ActivityIndicator /> :  totals.vendido!=undefined?"$ " +totals.vendido:"$ 0" }</Text>
         </View>
         <View style={styles.data}>
           <Text style={styles.text}>Total Ganado/Perdido: </Text>
           <Text style={ !isLoading && totals.lucro < 0 ? styles.textRed : styles.textGreen }>
-            { isLoading ? <ActivityIndicator /> : ("$ " + totals.lucro + " " + totals.lucroP) }
+            { isLoading ? <ActivityIndicator /> :( (totals.lucro!=undefined?"$ " +totals.lucro:"$ 0" )+ " " +(totals.lucroP!=undefined?"$ " +totals.lucroP:"$ 0")) }
           </Text>
         </View>
         <View style={styles.buttonPanel}>
