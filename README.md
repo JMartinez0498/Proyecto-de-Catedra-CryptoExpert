@@ -15,13 +15,12 @@ Francisco Josué Gonzalez Portillo GP121514 </br>
 - [Documento](https://drive.google.com/file/d/1cFnJpUF3a3LKa2DkUuSs8H6L7TVMwNfW/view)
 
 
-#Manuales
-Manual Tecnico https://drive.google.com/file/d/1rYVjzy1uQXYJvrw4yPwoZUg6PhdH0jsa/view?usp=sharing 
+# Manuales
+Manual Técnico https://drive.google.com/file/d/1rYVjzy1uQXYJvrw4yPwoZUg6PhdH0jsa/view?usp=sharing 
 <br />
 Manual de Usuario https://drive.google.com/file/d/1pXklHR1sx4D5aWTf3Jy134yraaW5PkRp/view?usp=sharing
 
-#Video de Fase 2
-https://youtu.be/lwePfEj-dzY
+[Video de Fase 2](https://youtu.be/lwePfEj-dzY)
 
 # Licencia 
 Atribución-CompartirIgual 4.0 Internacional (CC BY-SA 4.0) 
